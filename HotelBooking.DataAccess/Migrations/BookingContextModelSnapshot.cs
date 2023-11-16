@@ -111,6 +111,10 @@ namespace HotelBooking.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Bookings");
                 });
 
@@ -140,6 +144,10 @@ namespace HotelBooking.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HotelId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Reviews");
                 });
 
@@ -150,6 +158,9 @@ namespace HotelBooking.DataAccess.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessLevel")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -187,6 +198,9 @@ namespace HotelBooking.DataAccess.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("integer");
 
+                    b.Property<int>("HotelId")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean");
 
@@ -199,7 +213,77 @@ namespace HotelBooking.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HotelId");
+
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("HotelBooking.Entities.Booking", b =>
+                {
+                    b.HasOne("Room", "Room")
+                        .WithMany("Bookings")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelBooking.Entities.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HotelBooking.Entities.Review", b =>
+                {
+                    b.HasOne("Hotel", "Hotel")
+                        .WithMany("Reviews")
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelBooking.Entities.User", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hotel");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Room", b =>
+                {
+                    b.HasOne("Hotel", "Hotel")
+                        .WithMany("Rooms")
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hotel");
+                });
+
+            modelBuilder.Entity("Hotel", b =>
+                {
+                    b.Navigation("Reviews");
+
+                    b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("HotelBooking.Entities.User", b =>
+                {
+                    b.Navigation("Bookings");
+
+                    b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("Room", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

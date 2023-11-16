@@ -16,7 +16,12 @@ namespace HotelBooking.Entities
         public string Comment { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        
+        [ForeignKey("HotelId")]
+        public Hotel Hotel { get; set; }
+
+        [ForeignKey("UserId")]
+        public User User { get; set; }
+
     }
 
 

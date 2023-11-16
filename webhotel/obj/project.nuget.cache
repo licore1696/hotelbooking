@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "58IyBfndNEap6f+Y0BczMWGCvuX/UNUXvLLdUgfHvXhhUQHyAmzwjm5VgbFx2CaFGvcojGE43DDS/Y3EUX5dSA==",
+  "dgSpecHash": "TDjkw/GolH2SGoZOBqY5h3E9Esea5ElIhiCZniDQ9+pRArEf4ZZHn1L8qDtOyvvTpkwC6T2EUkk/EijsNJSCcw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\danik\\Desktop\\repos\\webhotel\\HotelBooking.csproj",
+  "projectFilePath": "D:\\kp\\webhotel\\HotelBooking.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\danik\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\danik\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.12\\microsoft.aspnetcore.openapi.7.0.12.nupkg.sha512",

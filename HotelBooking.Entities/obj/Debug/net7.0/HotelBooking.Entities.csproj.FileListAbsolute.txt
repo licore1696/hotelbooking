@@ -20,3 +20,14 @@ C:\Users\danik\Desktop\repos\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking
 C:\Users\danik\Desktop\repos\HotelBooking.Entities\obj\Debug\net7.0\refint\HotelBooking.Entities.dll
 C:\Users\danik\Desktop\repos\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking.Entities.pdb
 C:\Users\danik\Desktop\repos\HotelBooking.Entities\obj\Debug\net7.0\ref\HotelBooking.Entities.dll
+D:\kp\HotelBooking.Entities\bin\Debug\net7.0\HotelBooking.Entities.deps.json
+D:\kp\HotelBooking.Entities\bin\Debug\net7.0\HotelBooking.Entities.dll
+D:\kp\HotelBooking.Entities\bin\Debug\net7.0\HotelBooking.Entities.pdb
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking.Entities.GeneratedMSBuildEditorConfig.editorconfig
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking.Entities.AssemblyInfoInputs.cache
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking.Entities.AssemblyInfo.cs
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking.Entities.csproj.CoreCompileInputs.cache
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking.Entities.dll
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\refint\HotelBooking.Entities.dll
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\HotelBooking.Entities.pdb
+D:\kp\HotelBooking.Entities\obj\Debug\net7.0\ref\HotelBooking.Entities.dll

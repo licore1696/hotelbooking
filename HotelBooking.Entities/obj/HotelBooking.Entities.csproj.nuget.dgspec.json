@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.Entities\\HotelBooking.Entities.csproj": {}
+    "D:\\kp\\HotelBooking.Entities\\HotelBooking.Entities.csproj": {}
   },
   "projects": {
-    "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.Entities\\HotelBooking.Entities.csproj": {
+    "D:\\kp\\HotelBooking.Entities\\HotelBooking.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.Entities\\HotelBooking.Entities.csproj",
+        "projectUniqueName": "D:\\kp\\HotelBooking.Entities\\HotelBooking.Entities.csproj",
         "projectName": "HotelBooking.Entities",
-        "projectPath": "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.Entities\\HotelBooking.Entities.csproj",
+        "projectPath": "D:\\kp\\HotelBooking.Entities\\HotelBooking.Entities.csproj",
         "packagesPath": "C:\\Users\\danik\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.Entities\\obj\\",
+        "outputPath": "D:\\kp\\HotelBooking.Entities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\danik\\AppData\\Roaming\\NuGet\\NuGet.Config",

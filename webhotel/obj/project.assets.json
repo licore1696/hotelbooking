@@ -1489,11 +1489,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\danik\\Desktop\\repos\\webhotel\\HotelBooking.csproj",
+      "projectUniqueName": "D:\\kp\\webhotel\\HotelBooking.csproj",
       "projectName": "HotelBooking",
-      "projectPath": "C:\\Users\\danik\\Desktop\\repos\\webhotel\\HotelBooking.csproj",
+      "projectPath": "D:\\kp\\webhotel\\HotelBooking.csproj",
       "packagesPath": "C:\\Users\\danik\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\danik\\Desktop\\repos\\webhotel\\obj\\",
+      "outputPath": "D:\\kp\\webhotel\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\danik\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1510,11 +1510,11 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.DataAccess\\HotelBooking.DataAccess.csproj": {
-              "projectPath": "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.DataAccess\\HotelBooking.DataAccess.csproj"
+            "D:\\kp\\HotelBooking.DataAccess\\HotelBooking.DataAccess.csproj": {
+              "projectPath": "D:\\kp\\HotelBooking.DataAccess\\HotelBooking.DataAccess.csproj"
             },
-            "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.Entities\\HotelBooking.Entities.csproj": {
-              "projectPath": "C:\\Users\\danik\\Desktop\\repos\\HotelBooking.Entities\\HotelBooking.Entities.csproj"
+            "D:\\kp\\HotelBooking.Entities\\HotelBooking.Entities.csproj": {
+              "projectPath": "D:\\kp\\HotelBooking.Entities\\HotelBooking.Entities.csproj"
             }
           }
         }
