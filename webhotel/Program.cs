@@ -1,5 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using HotelBooking.DataAccess;
+using HotelBooking.DataAccess.Repository.Contracts;
+using HotelBooking.DataAccess.Repository;
+using HotelBooking.Services.Contracts;
+using HotelBooking.Services;
+using AutoMapper;
+using HotelBooking.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +25,11 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<BookingContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService,UserService>();
+
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 var app = builder.Build();
 

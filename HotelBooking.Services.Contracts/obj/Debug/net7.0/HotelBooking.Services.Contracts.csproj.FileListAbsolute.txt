@@ -1,0 +1,17 @@
+D:\kp\HotelBooking.Services.Contracts\bin\Debug\net7.0\HotelBooking.Services.Contracts.deps.json
+D:\kp\HotelBooking.Services.Contracts\bin\Debug\net7.0\HotelBooking.Services.Contracts.dll
+D:\kp\HotelBooking.Services.Contracts\bin\Debug\net7.0\HotelBooking.Services.Contracts.pdb
+D:\kp\HotelBooking.Services.Contracts\bin\Debug\net7.0\HotelBooking.BookingDTO.dll
+D:\kp\HotelBooking.Services.Contracts\bin\Debug\net7.0\HotelBooking.Entities.dll
+D:\kp\HotelBooking.Services.Contracts\bin\Debug\net7.0\HotelBooking.BookingDTO.pdb
+D:\kp\HotelBooking.Services.Contracts\bin\Debug\net7.0\HotelBooking.Entities.pdb
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.csproj.AssemblyReference.cache
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.AssemblyInfoInputs.cache
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.AssemblyInfo.cs
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.csproj.CoreCompileInputs.cache
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.csproj.CopyComplete
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.dll
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\refint\HotelBooking.Services.Contracts.dll
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.pdb
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\ref\HotelBooking.Services.Contracts.dll

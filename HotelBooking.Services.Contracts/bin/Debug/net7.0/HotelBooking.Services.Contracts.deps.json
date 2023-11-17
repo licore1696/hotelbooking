@@ -1,0 +1,47 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "HotelBooking.Services.Contracts/1.0.0": {
+        "dependencies": {
+          "HotelBooking.BookingDTO": "1.0.0",
+          "HotelBooking.Entities": "1.0.0"
+        },
+        "runtime": {
+          "HotelBooking.Services.Contracts.dll": {}
+        }
+      },
+      "HotelBooking.BookingDTO/1.0.0": {
+        "runtime": {
+          "HotelBooking.BookingDTO.dll": {}
+        }
+      },
+      "HotelBooking.Entities/1.0.0": {
+        "runtime": {
+          "HotelBooking.Entities.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "HotelBooking.Services.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HotelBooking.BookingDTO/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HotelBooking.Entities/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

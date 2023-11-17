@@ -1,0 +1,11 @@
+D:\kp\HotelBooking.BookingDTO\bin\Debug\net7.0\HotelBooking.BookingDTO.deps.json
+D:\kp\HotelBooking.BookingDTO\bin\Debug\net7.0\HotelBooking.BookingDTO.dll
+D:\kp\HotelBooking.BookingDTO\bin\Debug\net7.0\HotelBooking.BookingDTO.pdb
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\HotelBooking.BookingDTO.GeneratedMSBuildEditorConfig.editorconfig
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\HotelBooking.BookingDTO.AssemblyInfoInputs.cache
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\HotelBooking.BookingDTO.AssemblyInfo.cs
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\HotelBooking.BookingDTO.csproj.CoreCompileInputs.cache
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\HotelBooking.BookingDTO.dll
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\refint\HotelBooking.BookingDTO.dll
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\HotelBooking.BookingDTO.pdb
+D:\kp\HotelBooking.BookingDTO\obj\Debug\net7.0\ref\HotelBooking.BookingDTO.dll

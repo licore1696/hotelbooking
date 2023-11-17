@@ -139,3 +139,11 @@ D:\kp\webhotel\obj\Debug\net7.0\refint\HotelBooking.dll
 D:\kp\webhotel\obj\Debug\net7.0\HotelBooking.pdb
 D:\kp\webhotel\obj\Debug\net7.0\HotelBooking.genruntimeconfig.cache
 D:\kp\webhotel\obj\Debug\net7.0\ref\HotelBooking.dll
+D:\kp\webhotel\bin\Debug\net7.0\HotelBooking.BookingDTO.dll
+D:\kp\webhotel\bin\Debug\net7.0\HotelBooking.Services.Contracts.dll
+D:\kp\webhotel\bin\Debug\net7.0\HotelBooking.Services.dll
+D:\kp\webhotel\bin\Debug\net7.0\HotelBooking.BookingDTO.pdb
+D:\kp\webhotel\bin\Debug\net7.0\HotelBooking.Services.Contracts.pdb
+D:\kp\webhotel\bin\Debug\net7.0\HotelBooking.Services.pdb
+D:\kp\webhotel\bin\Debug\net7.0\AutoMapper.dll
+D:\kp\webhotel\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
