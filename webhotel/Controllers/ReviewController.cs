@@ -2,92 +2,64 @@
 using Microsoft.EntityFrameworkCore;
 using HotelBooking.Entities;
 using HotelBooking.DataAccess;
+using HotelBooking.BookingDTO;
+using HotelBooking.Services.Contracts;
 
 namespace HotelBooking.Controllers
 {
     [ApiController]
-    [Route("api/HotelBooking")]
+    [Route("api/HotelBooking/Review")]
     public class ReviewController : ControllerBase
     {
-        private readonly BookingContext _context;
-
-        public ReviewController(BookingContext context)
+        public readonly IReviewService _reviewService;
+        public ReviewController(IReviewService reviewService)
         {
-            _context = context;
+            _reviewService = reviewService;
         }
 
-        [HttpGet("reviews")]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<ReviewDto>> GetById(int id)
         {
-            return await _context.Reviews.ToListAsync();
+            return await _reviewService.GetById(id);
         }
 
-        [HttpGet("reviews/{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        [HttpPost]
+        public async Task<ActionResult<int>> Create([FromBody] ReviewDto review)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            return await _reviewService.Create(review);
+        }
 
-            if (review == null)
+        [HttpGet("Reviews")]
+        public async Task<ActionResult<List<ReviewDto>>> GetReviews()
+        {
+            var reviews = await _reviewService.GetReviews();
+            return Ok(reviews);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] ReviewDto reviewDto)
+        {
+            var updatedReviewDto = await _reviewService.Update(reviewDto);
+
+            if (updatedReviewDto == null)
             {
                 return NotFound();
             }
 
-            return review;
+            return Ok(updatedReviewDto);
         }
 
-        [HttpPost("reviews")]
-        public async Task<ActionResult<Review>> CreateReview(Review review)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            _context.Reviews.Add(review);
-            await _context.SaveChangesAsync();
+            var result = await _reviewService.Delete(id);
 
-            return CreatedAtAction(nameof(GetReview), new { id = review.Id }, review);
-        }
-
-        [HttpPut("reviews/{id}")]
-        public async Task<IActionResult> UpdateReview(int id, Review review)
-        {
-            review.Id = id;
-            _context.Entry(review).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ReviewExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        [HttpDelete("reviews/{id}")]
-        public async Task<IActionResult> DeleteReview(int id)
-        {
-            var review = await _context.Reviews.FindAsync(id);
-
-            if (review == null)
+            if (!result)
             {
                 return NotFound();
             }
 
-            _context.Reviews.Remove(review);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool ReviewExists(int id)
-        {
-            return _context.Reviews.Any(e => e.Id == id);
         }
     }
 }

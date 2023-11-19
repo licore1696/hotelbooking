@@ -10,10 +10,10 @@ namespace HotelBooking.DataAccess.Repository.Contracts
     public interface IUserRepository
     {
         Task<User> GetById(int id);
-        Task<List<User>> GetAll();
+        Task<List<User>> GetUsers();
         Task<int> Create(User user);
-        //Task<int> Update(User user);
-        //Task<int> Delete(int id);  
+        Task Update(User user);
+        Task Delete(User user);
 
     }
 }

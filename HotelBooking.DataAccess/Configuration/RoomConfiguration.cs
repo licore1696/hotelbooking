@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HotelBooking.Entities;
 
-namespace HotelBooking.DataAccess.Configurations
+namespace HotelBooking.DataAccess.Configuration
 {
     public class RoomConfiguration : IEntityTypeConfiguration<Room>
     {

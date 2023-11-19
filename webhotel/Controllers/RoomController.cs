@@ -1,94 +1,65 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelBooking.DataAccess;
+using HotelBooking.BookingDTO;
+using HotelBooking.Services.Contracts;
 
 namespace HotelBooking.Controllers
 {
     [ApiController]
-    [Route("api/HotelBooking")]
+    [Route("api/HotelBooking/Room")]
     public class RoomController : ControllerBase
     {
-        private readonly BookingContext _context;
-
-        public RoomController(BookingContext context)
+        public readonly IRoomService _roomService;
+        public RoomController(IRoomService roomService)
         {
-            _context = context;
+            _roomService = roomService;
         }
 
-        [HttpGet("rooms")]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<RoomDto>> GetById(int id)
         {
-           return await _context.Set<Room>().ToListAsync();
-        }
-    
-
-    [HttpGet("rooms/{id}")]
-    public async Task<ActionResult<Room>> GetRoom(int id)
-    {
-        var room = await _context.Set<Room>().FindAsync(id);
-
-        if (room == null)
-        {
-            return NotFound();
+            return await _roomService.GetById(id);
         }
 
-        return room;
-    }
-
-    [HttpPost("rooms")]
-    public async Task<ActionResult<Room>> CreateRoom(Room room)
-    {
-        _context.Set<Room>().Add(room);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, room);
-    }
-
-    [HttpPut("rooms/{id}")]
-    public async Task<IActionResult> UpdateRoom(int id, Room room)
-    {
-        room.Id = id;
-
-        _context.Entry(room).State = EntityState.Modified;
-
-        try
+        [HttpPost]
+        public async Task<ActionResult<int>> Create([FromBody] RoomDto room)
         {
-            await _context.SaveChangesAsync();
+            return await _roomService.Create(room);
         }
-        catch (DbUpdateConcurrencyException)
+
+        [HttpGet("Rooms")]
+        public async Task<ActionResult<List<RoomDto>>> GetRooms()
         {
-            if (!RoomExists(id))
+            var rooms = await _roomService.GetRooms();
+            return Ok(rooms);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] RoomDto roomDto)
+        {
+            var updatedRoomDto = await _roomService.Update(roomDto);
+
+            if (updatedRoomDto == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+
+            return Ok(updatedRoomDto);
         }
 
-        return NoContent();
-    }
-
-    [HttpDelete("rooms/{id}")]
-    public async Task<IActionResult> DeleteRoom(int id)
-    {
-        var room = await _context.Set<Room>().FindAsync(id);
-
-        if (room == null)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            return NotFound();
+            var result = await _roomService.Delete(id);
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
-        _context.Set<Room>().Remove(room);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
     }
-
-    private bool RoomExists(int id)
-    {
-        return _context.Set<Room>().Any(e => e.Id == id);
-    }
-}
 }

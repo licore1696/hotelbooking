@@ -1,92 +1,63 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using HotelBooking.Entities;
-using HotelBooking.DataAccess;
-using System;
-using System.Threading.Tasks;
+using HotelBooking.Services.Contracts;
+using HotelBooking.BookingDTO;
 
-namespace HotelBooking.Controllers
+namespace BookingBooking.Controllers
 {
 
     [ApiController]
-    [Route("api/HotelBooking")]
+    [Route("api/HotelBooking/Booking")]
     public class BookingController : ControllerBase
     {
-        private readonly BookingContext _context;
-
-        public BookingController(BookingContext context)
+        public readonly IBookingService _bookingService;
+        public BookingController(IBookingService bookingService)
         {
-            _context = context;
+            _bookingService = bookingService;
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<BookingDto>> GetById(int id)
+        {
+            return await _bookingService.GetById(id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> Create([FromBody] BookingDto booking)
+        {
+            return await _bookingService.Create(booking);
         }
 
         [HttpGet("bookings")]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
-    {
-        var bookings = await _context.Set<Booking>().ToListAsync();
-        return bookings;
-    }
-
-    [HttpGet("bookings/{id}")]
-    public async Task<ActionResult<Booking>> GetBooking(int id)
-    {
-        var booking = await _context.Set<Booking>().FindAsync(id);
-
-        if (booking == null)
+        public async Task<ActionResult<List<BookingDto>>> GetBookings()
         {
-            return NotFound();
+            var bookings = await _bookingService.GetBookings();
+            return Ok(bookings);
         }
 
-        return booking;
-    }
-
-    [HttpPost("bookings")]
-    public async Task<ActionResult<Booking>> CreateBooking(Booking booking)
-    {
-        _context.Set<Booking>().Add(booking);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
-    }
-
-    [HttpPut("bookings")]
-    public async Task<IActionResult> UpdateBooking(Booking booking)
-    {
-            var bookingToupdate = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == booking.Id);
-            if (bookingToupdate == null) { return NotFound(); }
-            bookingToupdate.UserId = booking.UserId;
-            bookingToupdate.RoomId = booking.RoomId;
-            bookingToupdate.CheckInDate = booking.CheckInDate;
-            bookingToupdate.CheckOutDate = booking.CheckOutDate; 
-            bookingToupdate.TotalPrice = booking.TotalPrice;
-            bookingToupdate.Status = booking.Status;
-            bookingToupdate.Comments = booking.Comments;
-            _context.Update(bookingToupdate);
-
-            await _context.SaveChangesAsync();
-
-            return Ok();
-
-    }
-
-    [HttpDelete("bookings/{id}")]
-    public async Task<IActionResult> DeleteBooking(int id)
-    {
-        var booking = await _context.Set<Booking>().FindAsync(id);
-
-        if (booking == null)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] BookingDto bookingDto)
         {
-            return NotFound();
+            var updatedBookingDto = await _bookingService.Update(bookingDto);
+
+            if (updatedBookingDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedBookingDto);
         }
 
-        _context.Set<Booking>().Remove(booking);
-        await _context.SaveChangesAsync();
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _bookingService.Delete(id);
 
-        return NoContent();
-    }
+            if (!result)
+            {
+                return NotFound();
+            }
 
-    private bool BookingExists(int id)
-    {
-        return _context.Set<Booking>().Any(e => e.Id == id);
+            return NoContent();
+        }
     }
-}
 }

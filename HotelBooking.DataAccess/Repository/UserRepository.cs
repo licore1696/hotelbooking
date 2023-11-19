@@ -23,7 +23,7 @@ namespace HotelBooking.DataAccess.Repository
             return user.Id;
         }
 
-        public async Task<List<User>> GetAll()
+        public async Task<List<User>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
@@ -33,52 +33,18 @@ namespace HotelBooking.DataAccess.Repository
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-
-
-        /*
-          public async Task<IActionResult> DeleteUser(int id)
+        public async Task Update(User user)
         {
-            var user = await _context.Users.FindAsync(id);
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
+        public async Task Delete(User user)
+        {
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
-
-            return NoContent();
         }
-         [HttpPut("users/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, User user)
-        {
-              user.Id=id;
-            _context.Entry(user).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return N
-         
-         
-         */
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
+        
     }
 }
