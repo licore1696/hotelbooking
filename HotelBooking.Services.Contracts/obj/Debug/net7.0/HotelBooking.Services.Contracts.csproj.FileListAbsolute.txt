@@ -10,6 +10,7 @@ D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Con
 D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.AssemblyInfoInputs.cache
 D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.AssemblyInfo.cs
 D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.csproj.CoreCompileInputs.cache
+D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.sourcelink.json
 D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.csproj.CopyComplete
 D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\HotelBooking.Services.Contracts.dll
 D:\kp\HotelBooking.Services.Contracts\obj\Debug\net7.0\refint\HotelBooking.Services.Contracts.dll
