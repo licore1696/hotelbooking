@@ -11,7 +11,7 @@ namespace HotelBooking.Entities
     {
         public int Id { get; set; }
         public int HotelId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int Rating { get; set; }
         public string Comment { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -19,7 +19,7 @@ namespace HotelBooking.Entities
         [ForeignKey("HotelId")]
         public Hotel Hotel { get; set; }
 
-        [ForeignKey("UserId")]
+        
         public User User { get; set; }
 
     }

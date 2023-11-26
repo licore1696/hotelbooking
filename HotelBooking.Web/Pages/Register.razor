@@ -1,0 +1,86 @@
+﻿@page "/register"
+@using HotelBooking.BookingDTO
+@using HotelBooking.Services.Contracts
+@inject ISnackbar Snackbar
+@inject IUserService _userService
+@inject NavigationManager NavigationManager
+
+<MudContainer>
+    <MudPaper Elevation="0" Class="p-6" Style="max-width: 400px; margin: auto; margin-top: 100px; border-radius: 10px; text-align: center;">
+        <MudTypography Typo="Typo.h4" Class="mb-4" style="margin: 0; font-size: 25px;">Регистрация</MudTypography>
+
+        <MudForm @onsubmit="HandleRegistration">
+            <MudTextField Label="Имя пользователя" @bind-Value="username" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Электронная почта" @bind-Value="email" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Пароль" @bind-Value="password" Type="InputType.Password" Required="true" Variant="Variant.Outlined" Class="mb-2" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Подтверждение пароля" @bind-Value="confirmPassword" Required="true" Variant="Variant.Outlined" Type="InputType.Password" Class="mb-2" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Имя" @bind-Value="firstname" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Фамилия" @bind-Value="lastname" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" type="submit" OnClick="HandleRegistration" Class="mb-4" Style="width: 100%; border-radius: 20px;">Зарегистрироваться</MudButton>
+        </MudForm>
+
+        <MudText Typo="Typo.body2" Class="text-center">
+            Уже есть аккаунт? <MudLink Href="/login">Войти</MudLink>
+        </MudText>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private string username;
+    private string email;
+    private string password;
+    private string confirmPassword;
+    private string firstname;
+    private string lastname;
+
+    private async Task HandleRegistration()
+    {
+
+        try
+        {
+            
+            if (password != confirmPassword)
+            {
+                Snackbar.Add("Пароли не совпадают", Severity.Error);
+                return;
+            }
+            Console.WriteLine(username);
+            
+            var userDto = new UserDto
+            {
+                Username = username,
+                Email = email,
+                Password = password,
+                FirstName = firstname,
+                LastName = lastname 
+            };
+
+            
+            int userId = await _userService.Create(userDto);
+
+            if (userId != -1)
+            {
+                Snackbar.Add("Регистрация успешна", Severity.Success);
+                NavigationManager.NavigateTo("/login");
+            }
+            else
+            {
+                Snackbar.Add("Ошибка при регистрации", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            Snackbar.Add("Произошла ошибка при регистрации", Severity.Error);
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await HandleRegistration();
+        }
+    }
+}

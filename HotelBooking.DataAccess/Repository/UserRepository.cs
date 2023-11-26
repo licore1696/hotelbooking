@@ -33,6 +33,11 @@ namespace HotelBooking.DataAccess.Repository
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<User> GetByUsername(string username)
+        {
+            return await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
+        }
+
         public async Task Update(User user)
         {
             _context.Users.Update(user);

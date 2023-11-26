@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using HotelBooking.Entities;
-using HotelBooking.DataAccess;
 using HotelBooking.Services.Contracts;
 using HotelBooking.BookingDTO;
 
@@ -12,17 +9,25 @@ namespace HotelBooking.Controllers
     public class UserController : ControllerBase
     {
         public readonly IUserService _userService;
+        
         public UserController(IUserService userService)
         {
             _userService = userService;
+            
         }
 
 
 
-        [HttpGet("{Id}")]
+        [HttpGet("GetById/{Id}")]
         public async Task<ActionResult<UserDto>> GetById(int id)
         {
             return await _userService.GetById(id);
+        }
+
+        [HttpGet("GetByUsername/{Username}")]
+        public async Task<ActionResult<UserDto>> GetByUsername(string Username)
+        {
+            return await _userService.GetByUsername(Username);
         }
 
         [HttpPost]
@@ -38,7 +43,7 @@ namespace HotelBooking.Controllers
             return Ok(users);
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] UserDto userDto)
         {
             var updatedUserDto = await _userService.Update(userDto);
@@ -63,6 +68,6 @@ namespace HotelBooking.Controllers
 
             return NoContent();
         }
-
+        
     }
 }

@@ -9,11 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.Entities", "Ho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.DataAccess", "HotelBooking.DataAccess\HotelBooking.DataAccess.csproj", "{C2E56A49-1ED8-4912-935C-17E5B6AA9BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBooking.Services", "HotelBooking.Services\HotelBooking.Services.csproj", "{2A44EF66-80BA-4764-93FA-D80FC11AD938}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.Services", "HotelBooking.Services\HotelBooking.Services.csproj", "{2A44EF66-80BA-4764-93FA-D80FC11AD938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBooking.Services.Contracts", "HotelBooking.Services.Contracts\HotelBooking.Services.Contracts.csproj", "{75AEBB71-554A-413B-9EB4-5ED6592CE025}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.Services.Contracts", "HotelBooking.Services.Contracts\HotelBooking.Services.Contracts.csproj", "{75AEBB71-554A-413B-9EB4-5ED6592CE025}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBooking.BookingDTO", "HotelBooking.BookingDTO\HotelBooking.BookingDTO.csproj", "{E18597BD-1513-41F7-A671-14DCA9C4EB44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.BookingDTO", "HotelBooking.BookingDTO\HotelBooking.BookingDTO.csproj", "{E18597BD-1513-41F7-A671-14DCA9C4EB44}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.Web", "HotelBooking.Web\HotelBooking.Web.csproj", "{3083B414-9460-4213-9464-69FB3D13132D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{E18597BD-1513-41F7-A671-14DCA9C4EB44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E18597BD-1513-41F7-A671-14DCA9C4EB44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E18597BD-1513-41F7-A671-14DCA9C4EB44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3083B414-9460-4213-9464-69FB3D13132D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3083B414-9460-4213-9464-69FB3D13132D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3083B414-9460-4213-9464-69FB3D13132D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3083B414-9460-4213-9464-69FB3D13132D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

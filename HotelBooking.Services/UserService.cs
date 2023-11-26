@@ -20,8 +20,17 @@ namespace HotelBooking.Services
         public async Task<int> Create(UserDto userDto)
         {
             var userToAdd = _mapper.Map<User>(userDto);
+            
+                return await _userRepository.Create(userToAdd);
+           
+            
+        }
 
-            return await _userRepository.Create(userToAdd);
+        public async Task<UserDto> GetByUsername(string username)
+        {
+            var user = await _userRepository.GetByUsername(username);
+
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task<UserDto> GetById(int id)

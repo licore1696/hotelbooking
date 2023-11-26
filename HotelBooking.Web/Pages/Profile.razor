@@ -1,0 +1,111 @@
+﻿@page "/profile/{userId:int}"
+
+@using HotelBooking.BookingDTO
+@using HotelBooking.Services.Contracts
+
+@inject ISnackbar Snackbar
+@inject IUserService _userService
+@inject NavigationManager NavigationManager
+
+<MudContainer>
+    <MudPaper Elevation="0" Class="p-6" Style="max-width: 400px; margin: auto; margin-top: 100px; text-align: center;">
+        <MudTypography Typo="Typo.h3" Class="mb-4"  style="margin: 0; font-size: 25px;">Профиль пользователя</MudTypography>
+
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Имя пользователя" @bind-Value="username" Class="mb-4" ReadOnly="true" />
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Электронная почта" @bind-Value="email" Class="mb-4" ReadOnly="!isEditMode" />
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Имя" @bind-Value="firstname" Class="mb-4" ReadOnly="!isEditMode" />
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Фамилия" @bind-Value="lastname" Class="mb-4" ReadOnly="!isEditMode" />
+
+        @if (isEditMode)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="position-relative mb-4" Style="width: 100%; border-radius: 20px;" OnClick="HandleSave">Сохранить изменения</MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="position-relative mb-4 border-radius: 20px;" OnClick="HandleEdit">Редактировать</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Error" Class="position-relative mb-4 border-radius: 20px;" OnClick="HandleDelete">Удалить аккаунт</MudButton>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private int userId;
+    private string username;
+    private string email;
+    private string firstname;
+    private string lastname;
+
+    private bool isEditMode = false;
+
+    [Parameter]
+    public int UserId
+    {
+        get => userId;
+        set
+        {
+            if (userId != value)
+            {
+                userId = value;
+                LoadUserData();
+            }
+        }
+    }
+
+    private async Task LoadUserData()
+    {
+        try
+        {
+            var userData = await _userService.GetById(UserId);
+
+            if (userData != null)
+            {
+                username = userData.Username;
+                email = userData.Email;
+                firstname = userData.FirstName;
+                lastname = userData.LastName;
+            }
+            else
+            {
+                Snackbar.Add("Пользователь не найден", Severity.Error);
+                NavigationManager.NavigateTo("/login");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            Snackbar.Add("Произошла ошибка при загрузке данных", Severity.Error);
+        }
+    }
+
+    private async void HandleEdit()
+    {
+        isEditMode = true;
+    }
+
+    private async Task HandleSave()
+    {
+        isEditMode = false;
+
+        var existingUser = await _userService.GetById(userId);
+        existingUser.Username = username;
+        existingUser.FirstName = firstname;
+        existingUser.LastName = lastname;
+        existingUser.Email = email;
+
+        var EditedUser = await _userService.Update(existingUser);
+
+        Snackbar.Add("Информация успешно обновлена", Severity.Success);
+        NavigationManager.NavigateTo($"/profile/{userId}");
+    }
+
+    private async Task HandleDelete()
+    {
+        await _userService.Delete(userId);
+        NavigationManager.NavigateTo("/login");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUserData();
+    }
+}

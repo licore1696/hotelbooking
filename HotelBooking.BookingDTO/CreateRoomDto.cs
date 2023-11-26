@@ -12,6 +12,6 @@ namespace HotelBooking.BookingDTO
         public int Capacity { get; set; }
         public decimal PricePerNight { get; set; }
         public bool IsAvailable { get; set; }
-        //public int HotelId { get; set; }
+        public int HotelId { get; set; }
     }
 }
