@@ -9,7 +9,11 @@ public class Room
     public decimal PricePerNight { get; set; }
     public bool IsAvailable { get; set; }
 
-   
-
     
+    public int HotelId { get; set; }
+
+    [ForeignKey("HotelId")]
+    public Hotel Hotel { get; set; }
+
+    public List<Booking> Bookings { get; set; }
 }

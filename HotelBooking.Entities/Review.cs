@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotelBooking.Entities
 {
@@ -11,12 +6,17 @@ namespace HotelBooking.Entities
     {
         public int Id { get; set; }
         public int HotelId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int Rating { get; set; }
         public string Comment { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        [ForeignKey("HotelId")]
+        public Hotel Hotel { get; set; }
+
         
+        public User User { get; set; }
+
     }
 
 

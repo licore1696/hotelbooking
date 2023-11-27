@@ -1,0 +1,35 @@
+﻿@page "/"
+
+@using HotelBooking.BookingDTO.UserDTOs
+@using HotelBooking.Services.Contracts;
+@using HotelBooking.BookingDTO;
+@using MudBlazor;
+
+@inject IUserService _userService;
+<PageTitle>User</PageTitle>
+
+<MudTable Items="@users" Hover="true" Breakpoint="Breakpoint.Sm">
+    <HeaderContent>
+        <MudTh>Username</MudTh>
+        <MudTh>Email</MudTh>
+        <MudTh>Password</MudTh>
+        <MudTh>FirstName</MudTh>
+        <MudTh>LastName</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Username">@context.Username</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Password">@context.Password</MudTd>
+        <MudTd DataLabel="FirstName">@context.FirstName</MudTd>
+        <MudTd DataLabel="LastName">@context.LastName</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+	private List<UserDto>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await _userService.GetUsers();
+    }
+}

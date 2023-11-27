@@ -9,5 +9,7 @@ public class Hotel
     public decimal PricePerNight { get; set; }
     public double Rating { get; set; }
 
-    
+    public List<Room> Rooms { get; set; }
+    public List<Review> Reviews { get; set; }
+
 }

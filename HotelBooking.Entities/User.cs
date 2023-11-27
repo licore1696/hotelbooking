@@ -9,6 +9,10 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        public List<Booking> Bookings { get; set; }
+        public List<Review> Reviews { get; set; }
+        public int AccessLevel { get; set; } = 0;
+    
     }
 
 
