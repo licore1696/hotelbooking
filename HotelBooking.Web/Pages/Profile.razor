@@ -1,6 +1,7 @@
 ﻿@page "/profile/{userId:int}"
 
 @using HotelBooking.BookingDTO
+@using HotelBooking.BookingDTO.UserDTOs
 @using HotelBooking.Services.Contracts
 
 @inject ISnackbar Snackbar
@@ -11,10 +12,10 @@
     <MudPaper Elevation="0" Class="p-6" Style="max-width: 400px; margin: auto; margin-top: 100px; text-align: center;">
         <MudTypography Typo="Typo.h3" Class="mb-4"  style="margin: 0; font-size: 25px;">Профиль пользователя</MudTypography>
 
-        <MudTextField Variant="Variant.Outlined" Required="true" Label="Имя пользователя" @bind-Value="username" Class="mb-4" ReadOnly="true" />
-        <MudTextField Variant="Variant.Outlined" Required="true" Label="Электронная почта" @bind-Value="email" Class="mb-4" ReadOnly="!isEditMode" />
-        <MudTextField Variant="Variant.Outlined" Required="true" Label="Имя" @bind-Value="firstname" Class="mb-4" ReadOnly="!isEditMode" />
-        <MudTextField Variant="Variant.Outlined" Required="true" Label="Фамилия" @bind-Value="lastname" Class="mb-4" ReadOnly="!isEditMode" />
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Имя пользователя" @bind-Value="UserData.Username" Class="mb-4" ReadOnly="true" />
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Электронная почта" @bind-Value="UserData.Email" Class="mb-4" ReadOnly="!isEditMode" />
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Имя" @bind-Value="UserData.FirstName" Class="mb-4" ReadOnly="!isEditMode" />
+        <MudTextField Variant="Variant.Outlined" Required="true" Label="Фамилия" @bind-Value="UserData.LastName" Class="mb-4" ReadOnly="!isEditMode" />
 
         @if (isEditMode)
         {
@@ -29,40 +30,24 @@
 </MudContainer>
 
 @code {
-    private int userId;
-    private string username;
-    private string email;
-    private string firstname;
-    private string lastname;
+
+    private UpdateUserDto UserData { get; set; } = new UpdateUserDto();
 
     private bool isEditMode = false;
 
     [Parameter]
-    public int UserId
-    {
-        get => userId;
-        set
-        {
-            if (userId != value)
-            {
-                userId = value;
-                LoadUserData();
-            }
-        }
-    }
+    public int userId{ get; set; }
+    
 
     private async Task LoadUserData()
     {
         try
         {
-            var userData = await _userService.GetById(UserId);
+            var existingUser = await _userService.GetProfile(userId);
 
-            if (userData != null)
+            if (existingUser != null)
             {
-                username = userData.Username;
-                email = userData.Email;
-                firstname = userData.FirstName;
-                lastname = userData.LastName;
+                UserData = existingUser;
             }
             else
             {
@@ -86,13 +71,7 @@
     {
         isEditMode = false;
 
-        var existingUser = await _userService.GetById(userId);
-        existingUser.Username = username;
-        existingUser.FirstName = firstname;
-        existingUser.LastName = lastname;
-        existingUser.Email = email;
-
-        var EditedUser = await _userService.Update(existingUser);
+        var EditedUser = await _userService.UpdateUser(UserData);
 
         Snackbar.Add("Информация успешно обновлена", Severity.Success);
         NavigationManager.NavigateTo($"/profile/{userId}");

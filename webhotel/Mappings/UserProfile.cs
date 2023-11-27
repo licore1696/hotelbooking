@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HotelBooking.BookingDTO;
+using HotelBooking.BookingDTO.UserDTOs;
 using HotelBooking.Entities;
 
 namespace HotelBooking.Mappings
@@ -10,6 +10,8 @@ namespace HotelBooking.Mappings
         {
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, CreateUserDto>().ReverseMap();
+            CreateMap<User, UpdateUserDto>().ReverseMap();
+            CreateMap<User, CreateUpdateUserDto>().ReverseMap();
         }
     }
 }

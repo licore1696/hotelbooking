@@ -1,8 +1,8 @@
-﻿using HotelBooking.BookingDTO;
-using HotelBooking.Services.Contracts;
+﻿using AutoMapper;
+using HotelBooking.BookingDTO.UserDTOs;
 using HotelBooking.DataAccess.Repository.Contracts;
 using HotelBooking.Entities;
-using AutoMapper;
+using HotelBooking.Services.Contracts;
 
 namespace HotelBooking.Services
 {
@@ -20,10 +20,9 @@ namespace HotelBooking.Services
         public async Task<int> Create(UserDto userDto)
         {
             var userToAdd = _mapper.Map<User>(userDto);
-            
-                return await _userRepository.Create(userToAdd);
-           
-            
+            var existingUser = await _userRepository.GetByUsername(userToAdd.Username);
+            if (existingUser == null) { return await _userRepository.Create(userToAdd); }
+            return -1;
         }
 
         public async Task<UserDto> GetByUsername(string username)
@@ -73,6 +72,42 @@ namespace HotelBooking.Services
             await _userRepository.Delete(userToDelete);
 
             return true;
+        }
+
+        public async Task<UpdateUserDto> UpdateUser(UpdateUserDto updateUserDto)
+        {
+            var userToUpdate = await _userRepository.GetById(updateUserDto.Id);
+
+            if(userToUpdate == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(updateUserDto, userToUpdate);
+
+            await _userRepository.Update(userToUpdate);
+            return _mapper.Map<UpdateUserDto>(userToUpdate);
+            
+        }
+
+        public async Task<int> IfCanLogin(string username, string password)
+        {
+            var existingUser = await _userRepository.GetByUsername(username);
+            if(existingUser == null)
+            { return -1; }
+            if(existingUser.Password == password)
+            {
+                return existingUser.Id;
+            }
+            return -1;
+        }
+
+        public async Task<UpdateUserDto> GetProfile(int id)
+        {
+            var user = await _userRepository.GetById(id);
+
+            return _mapper.Map<UpdateUserDto>(user);
+
         }
     }
 }

@@ -8,11 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="Новая папка1\**" />
-    <Compile Remove="Новая папка\**" />
     <EmbeddedResource Remove="Новая папка1\**" />
-    <EmbeddedResource Remove="Новая папка\**" />
     <None Remove="Новая папка1\**" />
-    <None Remove="Новая папка\**" />
   </ItemGroup>
 
 </Project>

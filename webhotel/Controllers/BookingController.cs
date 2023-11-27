@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HotelBooking.Services.Contracts;
-using HotelBooking.BookingDTO;
+using HotelBooking.BookingDTO.BookingDTOs;
 
 namespace BookingBooking.Controllers
 {

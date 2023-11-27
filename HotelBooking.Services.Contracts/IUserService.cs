@@ -1,4 +1,4 @@
-﻿using HotelBooking.BookingDTO;
+﻿using HotelBooking.BookingDTO.UserDTOs;
 
 namespace HotelBooking.Services.Contracts
 {
@@ -10,5 +10,8 @@ namespace HotelBooking.Services.Contracts
         Task<List<UserDto>> GetUsers();
         Task<UserDto> Update(UserDto userDto);
         Task<bool> Delete(int id);
+        Task<UpdateUserDto> UpdateUser(UpdateUserDto updateUserDto);
+        Task<UpdateUserDto> GetProfile(int id);
+        Task<int> IfCanLogin(string username,string password);
     }
 }

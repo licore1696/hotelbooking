@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @using HotelBooking.BookingDTO
+@using HotelBooking.BookingDTO.UserDTOs
 @using HotelBooking.Services.Contracts
 @inject ISnackbar Snackbar
 @inject IUserService _userService
@@ -10,12 +11,12 @@
         <MudTypography Typo="Typo.h4" Class="mb-4" style="margin: 0; font-size: 25px;">Регистрация</MudTypography>
 
         <MudForm @onsubmit="HandleRegistration">
-            <MudTextField Label="Имя пользователя" @bind-Value="username" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Электронная почта" @bind-Value="email" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Пароль" @bind-Value="password" Type="InputType.Password" Required="true" Variant="Variant.Outlined" Class="mb-2" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Имя пользователя" @bind-Value="UserToRegistration.Username" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Электронная почта" @bind-Value="UserToRegistration.Email" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Пароль" @bind-Value="UserToRegistration.Password" Type="InputType.Password" Required="true" Variant="Variant.Outlined" Class="mb-2" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
             <MudTextField Label="Подтверждение пароля" @bind-Value="confirmPassword" Required="true" Variant="Variant.Outlined" Type="InputType.Password" Class="mb-2" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Имя" @bind-Value="firstname" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Фамилия" @bind-Value="lastname" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Имя" @bind-Value="UserToRegistration.FirstName" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+            <MudTextField Label="Фамилия" @bind-Value="UserToRegistration.LastName" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
 
             <MudButton Variant="Variant.Filled" Color="Color.Primary" type="submit" OnClick="HandleRegistration" Class="mb-4" Style="width: 100%; border-radius: 20px;">Зарегистрироваться</MudButton>
         </MudForm>
@@ -27,37 +28,24 @@
 </MudContainer>
 
 @code {
-    private string username;
-    private string email;
-    private string password;
+    private UserDto UserToRegistration { get; set; } = new UserDto();
     private string confirmPassword;
-    private string firstname;
-    private string lastname;
+    
 
     private async Task HandleRegistration()
     {
 
-        try
-        {
             
-            if (password != confirmPassword)
+            if (UserToRegistration.Password != confirmPassword)
             {
                 Snackbar.Add("Пароли не совпадают", Severity.Error);
                 return;
             }
-            Console.WriteLine(username);
             
-            var userDto = new UserDto
-            {
-                Username = username,
-                Email = email,
-                Password = password,
-                FirstName = firstname,
-                LastName = lastname 
-            };
+            int userId = await _userService.Create(UserToRegistration);
+            
 
-            
-            int userId = await _userService.Create(userDto);
+
 
             if (userId != -1)
             {
@@ -66,14 +54,9 @@
             }
             else
             {
-                Snackbar.Add("Ошибка при регистрации", Severity.Error);
+                Snackbar.Add("Ошибка при регистрации. Такой пользователь уже существует", Severity.Error);
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-            Snackbar.Add("Произошла ошибка при регистрации", Severity.Error);
-        }
+        
     }
 
     private async Task HandleKeyPress(KeyboardEventArgs e)

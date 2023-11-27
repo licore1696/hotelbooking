@@ -15,7 +15,7 @@
 
         <MudForm @onsubmit="HandleLogin">
             <MudTextField Label="Имя пользователя" @bind-Value="username" Required="true" Variant="Variant.Outlined" Class="mb-2" @onkeydown="HandleKeyPress" Style="border-radius: 20px;" />
-            <MudTextField Label="Пароль" @bind-Value="password" Required="true" Variant="Variant.Outlined" Type="InputType.Password" @onkeydown="HandleKeyPress" Class="mb-4" Style="border-radius: 20px;" />
+            <MudTextField Label="Пароль" @bind-Value="password" Required="true" Variant="Variant.Outlined" Type="InputType.Password" @onkeyup="HandleKeyPress" Class="mb-4" Style="border-radius: 20px;" />
 
             <MudButton Variant="Variant.Filled" Color="Color.Primary" type="submit" OnClick="HandleLogin" Class="position-relative mb-3" Style="width: 100%; border-radius: 20px;">Войти</MudButton>
         </MudForm>
@@ -33,24 +33,18 @@
     public int userId;
     private async Task HandleLogin()
     {
-        try
-        {
-            var userToAuthorize = await _userService.GetByUsername(username);
+        if (username != null && password!=null){
+        var canLogin = await _userService.IfCanLogin(username,password);
 
-            if (userToAuthorize != null && userToAuthorize.Password == password)
+            if (canLogin != -1)
             {
-                int userId = userToAuthorize.Id;
+                userId = canLogin;
                 NavigationManager.NavigateTo($"/profile/{userId}");
             }
             else
             {
                 Snackbar.Add("Неверное имя пользователя или пароль", Severity.Error);
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-            Snackbar.Add("Произошла ошибка при входе", Severity.Error);
         }
     }
 

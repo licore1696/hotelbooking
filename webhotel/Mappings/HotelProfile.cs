@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HotelBooking.BookingDTO;
+using HotelBooking.BookingDTO.HotelDtos;
 
 namespace HotelBooking.Mappings
 {

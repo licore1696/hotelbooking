@@ -1,4 +1,4 @@
-﻿namespace HotelBooking.BookingDTO
+﻿namespace HotelBooking.BookingDTO.UserDTOs
 {
     public class UserDto : CreateUserDto
     {

@@ -1,11 +1,7 @@
-﻿using HotelBooking.BookingDTO;
+﻿using HotelBooking.BookingDTO.UserDTOs;
+using HotelBooking.Entities;
 using HotelBooking.Services.Contracts;
-using HotelBooking.Web;
 using System.Net.Http.Json;
-using System.Net.Http.Formatting;
-using System.Text.Json.Serialization;
-using System.Text;
-using static MudBlazor.CategoryTypes;
 
 
 namespace HotelBooking.Web.Requests
@@ -21,21 +17,16 @@ namespace HotelBooking.Web.Requests
 
         public async Task<int> Create(UserDto userDto)
         {
-            try
-            {
+            
                 var response = await _httpClient.PostAsJsonAsync("api/HotelBooking/User", userDto);
-                Console.WriteLine(response);
+                int userId = -1;
+                if(response != null) { 
+                         userId = await response.Content.ReadFromJsonAsync<int>();
+                }
                 response.EnsureSuccessStatusCode();
 
-                int userId = await response.Content.ReadFromJsonAsync<int>();
-                return userId;
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error creating user: {ex.Message}");
                 
-                return -1; 
-            }
+                return userId;
         }
 
         public async Task<bool> Delete(int id)
@@ -75,19 +66,43 @@ namespace HotelBooking.Web.Requests
             }
         }
 
-        public async Task<List<UserDto>> GetUsers()
+        public async Task<UpdateUserDto> GetProfile(int id)
         {
-			try
-			{
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<UpdateUserDto>($"api/HotelBooking/User/getprofile/{id}");
+                return response;
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error getting user by ID: {ex.Message}");
+                return null;
+            }
+        }
+
+        public async Task<List<UserDto>> GetUsers()
+        { 
 				var response = await _httpClient.GetFromJsonAsync<List<UserDto>>($"api/HotelBooking/User/Users");
-				return response ?? new List<UserDto>();
-			}
-			catch (HttpRequestException ex)
-            { 			
-				Console.WriteLine($"Error getting users: {ex.Message}");
-				return new List<UserDto>();
-			}
+				return response ?? throw new HttpRequestException("Couldn't get users");
 		}
+
+        public async Task<int> IfCanLogin(string username, string password)
+        {
+            var httpResponse = await _httpClient.GetAsync($"api/HotelBooking/User/CanLogin?username={username}&password={password}");
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+               
+                var userId = await httpResponse.Content.ReadFromJsonAsync<int>();
+                if (userId != -1)
+                {
+                    return userId;
+                }
+            }
+
+            
+            return -1;
+        }
 
         public async Task<UserDto> Update(UserDto userDto)
         {
@@ -108,6 +123,22 @@ namespace HotelBooking.Web.Requests
                 throw new HttpRequestException($"Failed to update user. Status code: {response.StatusCode}. Reason: {response.ReasonPhrase}");
             }
 
+        }
+
+        public async Task<UpdateUserDto> UpdateUser(UpdateUserDto updateUserDto)
+        {
+            var response =await _httpClient.PutAsJsonAsync($"api/HotelBooking/User/updateAccount", updateUserDto);
+
+            if(response.IsSuccessStatusCode)
+            {
+                var updatedUserDto = await response.Content.ReadAsAsync<UpdateUserDto>();
+
+                return updatedUserDto;
+            }
+            else
+            {
+                throw new HttpRequestException($"Failed to update user. Status code: {response.StatusCode}. Reason: {response.ReasonPhrase}");
+            }
         }
     }
 }

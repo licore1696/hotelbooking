@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using HotelBooking.Entities;
+﻿using HotelBooking.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelBooking.DataAccess
 {

@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
-using HotelBooking.BookingDTO;
-using HotelBooking.DataAccess.Repository;
+using HotelBooking.BookingDTO.ReviewDtos;
 using HotelBooking.DataAccess.Repository.Contracts;
 using HotelBooking.Entities;
 using HotelBooking.Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelBooking.Services
 {

@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using HotelBooking.Entities;
-using HotelBooking.DataAccess;
-using HotelBooking.BookingDTO;
+﻿using HotelBooking.BookingDTO.ReviewDtos;
 using HotelBooking.Services.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBooking.Controllers
 {
