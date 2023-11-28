@@ -10,14 +10,14 @@
 @inject IUserService _userService
 
 <MudContainer>
-    <MudPaper Elevation="0" Class="p-6" Style="max-width: 400px; margin: auto; margin-top: 100px; border-radius: 10px; text-align: center;">
+    <MudPaper Elevation="0" Class="p-6 rounded-pill" Style="max-width: 400px; margin: auto; margin-top: 100px; text-align: center;">
         <MudTypography Typo="Typo.h3" Class="mb-4" style="margin: 0; font-size: 25px;">Вход</MudTypography>
 
         <MudForm @onsubmit="HandleLogin">
-            <MudTextField Label="Имя пользователя" @bind-Value="username" Required="true" Variant="Variant.Outlined" Class="mb-2" @onkeydown="HandleKeyPress" Style="border-radius: 20px;" />
-            <MudTextField Label="Пароль" @bind-Value="password" Required="true" Variant="Variant.Outlined" Type="InputType.Password" @onkeyup="HandleKeyPress" Class="mb-4" Style="border-radius: 20px;" />
+            <MudTextField Label="Имя пользователя" @bind-Value="username" Required="true" Variant="Variant.Outlined" Class="mb-2 rounded-pill" @onkeydown="HandleKeyPress" Style="border-radius: 20px;" />
+            <MudTextField Label="Пароль" @bind-Value="password" Required="true" Variant="Variant.Outlined" Type="InputType.Password" @onkeyup="HandleKeyPress" Class="mb-4 rounded-pill" Style="border-radius: 20px;" />
 
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" type="submit" OnClick="HandleLogin" Class="position-relative mb-3" Style="width: 100%; border-radius: 20px;">Войти</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" type="submit" OnClick="HandleLogin" Class="position-relative mb-3 rounded-pill" Style="width: 100%;">Войти</MudButton>
         </MudForm>
 
         <MudText Typo="Typo.body2" Class="text-center mt-4">

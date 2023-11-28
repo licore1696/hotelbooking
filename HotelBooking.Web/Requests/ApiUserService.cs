@@ -1,5 +1,4 @@
 ﻿using HotelBooking.BookingDTO.UserDTOs;
-using HotelBooking.Entities;
 using HotelBooking.Services.Contracts;
 using System.Net.Http.Json;
 
@@ -9,7 +8,7 @@ namespace HotelBooking.Web.Requests
     public class ApiUserService : IUserService
     {
         protected readonly HttpClient _httpClient;
-
+        
         public ApiUserService(HttpClient httpClient)
         {
             _httpClient = httpClient;
