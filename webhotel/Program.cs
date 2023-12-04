@@ -44,7 +44,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();//singleton
 
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 
-builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddAutoMapper(typeof(UserProfile));
 
@@ -65,7 +65,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<TokenMiddleware>();
+//app.UseMiddleware<TokenMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 app.UseAuthorization();

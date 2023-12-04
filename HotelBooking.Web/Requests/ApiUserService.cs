@@ -110,7 +110,7 @@ namespace HotelBooking.Web.Requests
 
         public async Task<UserDto> Update(UserDto userDto)
         {
-            SetAuthorizationHeader();
+            
             var response = await _httpClient.PutAsJsonAsync($"api/HotelBooking/User/update",userDto);
 
 

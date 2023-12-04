@@ -6,9 +6,9 @@ namespace HotelBooking.Midleware
     public class TokenMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
-        public TokenMiddleware(RequestDelegate next, TokenService tokenService)
+        public TokenMiddleware(RequestDelegate next, ITokenService tokenService)
         {
             _next = next;
             _tokenService = tokenService;
