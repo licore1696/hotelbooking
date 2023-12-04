@@ -8,6 +8,7 @@
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IUserService _userService
+@inject ApiTokenService _tokenService;
 
 <MudContainer>
     <MudPaper Elevation="0" Class="p-6 rounded-pill" Style="max-width: 400px; margin: auto; margin-top: 100px; text-align: center;">
@@ -34,12 +35,13 @@
     private async Task HandleLogin()
     {
         if (username != null && password!=null){
-        var canLogin = await _userService.IfCanLogin(username,password);
+            var canLogin = await _userService.IfCanLogin(username,password);
 
             if (canLogin != -1)
             {
                 userId = canLogin;
-                NavigationManager.NavigateTo($"/profile/{userId}");
+                await _tokenService.AuthenticateAndSetToken(username, userId);
+                NavigationManager.NavigateTo($"/profile/");
             }
             else
             {

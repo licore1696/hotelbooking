@@ -1,12 +1,14 @@
-﻿@page "/profile/{userId:int}"
+﻿@page "/profile/"
 
 @using HotelBooking.BookingDTO
 @using HotelBooking.BookingDTO.UserDTOs
 @using HotelBooking.Services.Contracts
+@using HotelBooking.Web.Requests
 
 @inject ISnackbar Snackbar
 @inject IUserService _userService
 @inject NavigationManager NavigationManager
+@inject ApiTokenService _tokenService
 
 <MudContainer>
     <MudPaper Elevation="0" Class="p-6" Style="max-width: 400px; margin: auto; margin-top: 100px; text-align: center;">
@@ -25,6 +27,7 @@
         {
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="position-relative mb-4 border-radius: 20px;" OnClick="HandleEdit">Редактировать</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Error" Class="position-relative mb-4 border-radius: 20px;" OnClick="HandleDelete">Удалить аккаунт</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="position-relative mb-4" Style="width: 100%; border-radius: 20px;" OnClick="HandleLogout">Выйти</MudButton>
         }
     </MudPaper>
 </MudContainer>
@@ -37,7 +40,7 @@
 
     [Parameter]
     public int userId{ get; set; }
-    
+
 
     private async Task LoadUserData()
     {
@@ -74,7 +77,7 @@
         var EditedUser = await _userService.UpdateUser(UserData);
 
         Snackbar.Add("Информация успешно обновлена", Severity.Success);
-        NavigationManager.NavigateTo($"/profile/{userId}");
+        NavigationManager.NavigateTo($"/profile/");
     }
 
     private async Task HandleDelete()
@@ -82,9 +85,28 @@
         await _userService.Delete(userId);
         NavigationManager.NavigateTo("/login");
     }
-
+    private async Task HandleLogout()
+    {
+        await _tokenService.RemoveToken();
+        NavigationManager.NavigateTo($"/login");
+    }
     protected override async Task OnInitializedAsync()
     {
-        await LoadUserData();
+
+        var token = await _tokenService.GetToken();
+
+        if (string.IsNullOrEmpty(token))
+        {
+
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+                userId = await _tokenService.GetUserIdFromToken();
+
+                await LoadUserData();
+            
+            
+        }
     }
 }

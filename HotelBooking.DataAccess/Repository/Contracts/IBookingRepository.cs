@@ -9,5 +9,6 @@ namespace HotelBooking.DataAccess.Repository.Contracts
         Task<int> Create(Booking booking);
         Task Update(Booking booking);
         Task Delete(Booking booking);
+        Task<List<Booking>> GetBookingsByRoomIdAndDate(int roomId, DateTime checkInDate, DateTime checkOutDate);
     }
 }

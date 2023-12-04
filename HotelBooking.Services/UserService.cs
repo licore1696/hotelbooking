@@ -10,18 +10,23 @@ namespace HotelBooking.Services
     {
         public readonly IUserRepository _userRepository;
         public readonly IMapper _mapper;
+        public readonly IPasswordService _passwordService;
 
-        public UserService(IUserRepository userRepository, IMapper mapper )
+        public UserService(IUserRepository userRepository, IMapper mapper, IPasswordService passwordService )
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _passwordService = passwordService;
         }
 
         public async Task<int> Create(UserDto userDto)
         {
             var userToAdd = _mapper.Map<User>(userDto);
             var existingUser = await _userRepository.GetByUsername(userToAdd.Username);
-            if (existingUser == null) { return await _userRepository.Create(userToAdd); }
+            if (existingUser == null) {
+                userToAdd.Password = _passwordService.HashPassword(userToAdd.Password);
+
+                return await _userRepository.Create(userToAdd); }
             return -1;
         }
 
@@ -95,7 +100,7 @@ namespace HotelBooking.Services
             var existingUser = await _userRepository.GetByUsername(username);
             if(existingUser == null)
             { return -1; }
-            if(existingUser.Password == password)
+            if (_passwordService.VerifyPassword(password, existingUser.Password))
             {
                 return existingUser.Id;
             }

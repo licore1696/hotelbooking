@@ -15,7 +15,7 @@ namespace HotelBooking.Controllers
             _userService = userService;
             
         }
-
+        //role запросов(админ панель !!!)
 
 
         [HttpGet("GetById/{Id}")]

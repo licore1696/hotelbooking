@@ -10,15 +10,15 @@
     <MudPaper Elevation="0" Class="p-6" Style="max-width: 400px; margin: auto; margin-top: 100px; border-radius: 10px; text-align: center;">
         <MudTypography Typo="Typo.h4" Class="mb-4" style="margin: 0; font-size: 25px;">Регистрация</MudTypography>
 
-        <MudForm @onsubmit="HandleRegistration">
-            <MudTextField Label="Имя пользователя" @bind-Value="UserToRegistration.Username" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Электронная почта" @bind-Value="UserToRegistration.Email" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Пароль" @bind-Value="UserToRegistration.Password" Type="InputType.Password" Required="true" Variant="Variant.Outlined" Class="mb-2" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Подтверждение пароля" @bind-Value="confirmPassword" Required="true" Variant="Variant.Outlined" Type="InputType.Password" Class="mb-2" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Имя" @bind-Value="UserToRegistration.FirstName" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
-            <MudTextField Label="Фамилия" @bind-Value="UserToRegistration.LastName" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" @onkeydown="HandleKeyPress" />
+        <MudForm @bind-IsValid="@success">@*помеял и бо так на сайте  mudblazor написано*@
+            <MudTextField Label="Имя пользователя" @bind-Value="UserToRegistration.Username" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;"  />
+            <MudTextField Label="Электронная почта" @bind-Value="UserToRegistration.Email" Required="true" Class="mb-2" Variant="Variant.Outlined" Style="border-radius: 20px;"  />
+            <MudTextField Label="Пароль" @bind-Value="UserToRegistration.Password" Type="InputType.Password" Required="true" Variant="Variant.Outlined" Class="mb-2" Style="border-radius: 20px;"  />
+            <MudTextField Label="Подтверждение пароля" @bind-Value="confirmPassword" Required="true" Variant="Variant.Outlined" Type="InputType.Password" Class="mb-2" Style="border-radius: 20px;"  />
+            <MudTextField Label="Имя" @bind-Value="UserToRegistration.FirstName" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;"  />
+            <MudTextField Label="Фамилия" @bind-Value="UserToRegistration.LastName" Class="mb-2" Variant="Variant.Outlined" Required="true" Style="border-radius: 20px;" />
 
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" type="submit" OnClick="HandleRegistration" Class="mb-4" Style="width: 100%; border-radius: 20px;">Зарегистрироваться</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" OnClick="HandleRegistration" Class="mb-4" Style="width: 100%; border-radius: 20px;">Зарегистрироваться</MudButton>
         </MudForm>
 
         <MudText Typo="Typo.body2" Class="text-center">
@@ -30,7 +30,8 @@
 @code {
     private UserDto UserToRegistration { get; set; } = new UserDto();
     private string confirmPassword;
-    
+    private bool success;
+
 
     private async Task HandleRegistration()
     {
@@ -57,13 +58,5 @@
                 Snackbar.Add("Ошибка при регистрации. Такой пользователь уже существует", Severity.Error);
             }
         
-    }
-
-    private async Task HandleKeyPress(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-        {
-            await HandleRegistration();
-        }
     }
 }

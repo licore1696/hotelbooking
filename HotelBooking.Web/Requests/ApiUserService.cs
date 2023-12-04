@@ -1,5 +1,6 @@
 ﻿using HotelBooking.BookingDTO.UserDTOs;
 using HotelBooking.Services.Contracts;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 
@@ -8,10 +9,12 @@ namespace HotelBooking.Web.Requests
     public class ApiUserService : IUserService
     {
         protected readonly HttpClient _httpClient;
-        
-        public ApiUserService(HttpClient httpClient)
+        private readonly ApiTokenService _tokenService;
+
+        public ApiUserService(HttpClient httpClient, ApiTokenService tokenService)
         {
             _httpClient = httpClient;
+            _tokenService = tokenService;
         }
 
         public async Task<int> Create(UserDto userDto)
@@ -69,6 +72,7 @@ namespace HotelBooking.Web.Requests
         {
             try
             {
+
                 var response = await _httpClient.GetFromJsonAsync<UpdateUserDto>($"api/HotelBooking/User/getprofile/{id}");
                 return response;
             }
@@ -95,6 +99,7 @@ namespace HotelBooking.Web.Requests
                 var userId = await httpResponse.Content.ReadFromJsonAsync<int>();
                 if (userId != -1)
                 {
+                    
                     return userId;
                 }
             }
@@ -105,7 +110,7 @@ namespace HotelBooking.Web.Requests
 
         public async Task<UserDto> Update(UserDto userDto)
         {
-            
+            SetAuthorizationHeader();
             var response = await _httpClient.PutAsJsonAsync($"api/HotelBooking/User/update",userDto);
 
 
@@ -126,6 +131,7 @@ namespace HotelBooking.Web.Requests
 
         public async Task<UpdateUserDto> UpdateUser(UpdateUserDto updateUserDto)
         {
+            SetAuthorizationHeader();
             var response =await _httpClient.PutAsJsonAsync($"api/HotelBooking/User/updateAccount", updateUserDto);
 
             if(response.IsSuccessStatusCode)
@@ -137,6 +143,15 @@ namespace HotelBooking.Web.Requests
             else
             {
                 throw new HttpRequestException($"Failed to update user. Status code: {response.StatusCode}. Reason: {response.ReasonPhrase}");
+            }
+        }
+
+        private async void SetAuthorizationHeader()
+        {
+            var token = await _tokenService.GetToken();
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         }
     }
