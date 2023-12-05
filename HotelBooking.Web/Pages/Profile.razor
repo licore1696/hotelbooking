@@ -82,7 +82,14 @@
 
     private async Task HandleDelete()
     {
-        await _userService.Delete(userId);
+        if(await _userService.Delete(userId))
+        {
+            Snackbar.Add("Пользователь удален", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Действие сессии прекращено", Severity.Error);
+        }
         NavigationManager.NavigateTo("/login");
     }
     private async Task HandleLogout()
@@ -102,10 +109,12 @@
         }
         else
         {
-                userId = await _tokenService.GetUserIdFromToken();
-
+            userId = await _tokenService.GetUserIdFromToken();
+            if (userId == -1) { NavigationManager.NavigateTo("/login"); Snackbar.Add("Действие ссессии прекращено", Severity.Error); }
+            
                 await LoadUserData();
             
+
             
         }
     }

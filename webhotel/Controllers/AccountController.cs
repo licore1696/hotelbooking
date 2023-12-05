@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace HotelBooking.Controllers
 {
     [ApiController]
-    [Route("api/token")]
-    public class TokenController : ControllerBase
+    [Route("api/account")]
+    public class AccountController : ControllerBase
     {
         private readonly ITokenService _tokenService;
 
-        public TokenController(ITokenService tokenService)
+        public AccountController(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }

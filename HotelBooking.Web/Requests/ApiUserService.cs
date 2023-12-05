@@ -1,8 +1,9 @@
 ﻿using HotelBooking.BookingDTO.UserDTOs;
 using HotelBooking.Services.Contracts;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-
+using Microsoft.Extensions.Logging;
 
 namespace HotelBooking.Web.Requests
 {
@@ -10,11 +11,13 @@ namespace HotelBooking.Web.Requests
     {
         protected readonly HttpClient _httpClient;
         private readonly ApiTokenService _tokenService;
+        private readonly ILogger<ApiUserService> _logger;
 
-        public ApiUserService(HttpClient httpClient, ApiTokenService tokenService)
+        public ApiUserService(HttpClient httpClient, ApiTokenService tokenService, ILogger<ApiUserService> logger)
         {
             _httpClient = httpClient;
             _tokenService = tokenService;
+            _logger = logger;
         }
 
         public async Task<int> Create(UserDto userDto)
@@ -32,8 +35,11 @@ namespace HotelBooking.Web.Requests
         }
 
         public async Task<bool> Delete(int id)
+            
         {
-            var response = await _httpClient.DeleteAsync($"api/HotelBooking/User/{id}");
+            await SetAuthorizationHeader();
+
+            var response = await _httpClient.DeleteAsync($"api/HotelBooking/User/token/{id}");
             
             
             return await response.Content.ReadAsAsync<bool>();
@@ -70,10 +76,11 @@ namespace HotelBooking.Web.Requests
 
         public async Task<UpdateUserDto> GetProfile(int id)
         {
+            
             try
             {
-
-                var response = await _httpClient.GetFromJsonAsync<UpdateUserDto>($"api/HotelBooking/User/getprofile/{id}");
+                await SetAuthorizationHeader();
+                var response = await _httpClient.GetFromJsonAsync<UpdateUserDto>($"api/HotelBooking/User/token/getprofile/{id}");
                 return response;
             }
             catch (HttpRequestException ex)
@@ -124,6 +131,7 @@ namespace HotelBooking.Web.Requests
 
             else
             {
+                
                 throw new HttpRequestException($"Failed to update user. Status code: {response.StatusCode}. Reason: {response.ReasonPhrase}");
             }
 
@@ -131,13 +139,16 @@ namespace HotelBooking.Web.Requests
 
         public async Task<UpdateUserDto> UpdateUser(UpdateUserDto updateUserDto)
         {
-            SetAuthorizationHeader();
-            var response =await _httpClient.PutAsJsonAsync($"api/HotelBooking/User/updateAccount", updateUserDto);
+            await SetAuthorizationHeader();
 
-            if(response.IsSuccessStatusCode)
+            
+            
+
+            var response = await _httpClient.PutAsJsonAsync("api/HotelBooking/User/token/updateAccount", updateUserDto);
+
+            if (response.IsSuccessStatusCode)
             {
                 var updatedUserDto = await response.Content.ReadAsAsync<UpdateUserDto>();
-
                 return updatedUserDto;
             }
             else
@@ -146,12 +157,18 @@ namespace HotelBooking.Web.Requests
             }
         }
 
-        private async void SetAuthorizationHeader()
+        private async Task SetAuthorizationHeader()
         {
+            
             var token = await _tokenService.GetToken();
             if (!string.IsNullOrEmpty(token))
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                _logger.LogInformation("Authorization header set successfully");
+            }
+            else
+            {
+                _logger.LogWarning("Token is null or empty");
             }
         }
     }

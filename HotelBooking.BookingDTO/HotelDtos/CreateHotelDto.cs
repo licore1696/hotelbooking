@@ -8,6 +8,6 @@
         public string City { get; set; }
         public string Country { get; set; }
         public decimal PricePerNight { get; set; }
-        public double Rating { get; set; }
+        public int Rating { get; set; }
     }
 }

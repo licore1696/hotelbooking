@@ -56,7 +56,7 @@ namespace HotelBooking.Controllers
             return Ok(updatedUserDto);
         }
 
-        [HttpPut("updateAccount")]
+        [HttpPut("token/updateAccount")]
         public async Task<IActionResult> UpdateAccount([FromBody] UpdateUserDto updateUserDto)
         {
             var updatedUserDto = await _userService.UpdateUser(updateUserDto);
@@ -76,14 +76,14 @@ namespace HotelBooking.Controllers
             return result;
         }
 
-        [HttpGet("getprofile/{id}")]
+        [HttpGet("token/getprofile/{id}")]
         public async Task<ActionResult<UpdateUserDto>> GetProfile(int id)
         {
             return await _userService.GetProfile(id);
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("token/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _userService.Delete(id);

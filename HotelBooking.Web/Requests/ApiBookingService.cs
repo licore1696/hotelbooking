@@ -1,6 +1,6 @@
 ﻿namespace HotelBooking.Web.Requests
 {
-    public class ApiReviewController
+    public class ApiBookingService
     {
     }
 }

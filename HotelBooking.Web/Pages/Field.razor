@@ -3,6 +3,10 @@
 @using HotelBooking.BookingDTO.RoomDtos
 @using HotelBooking.BookingDTO.Search
 @using HotelBooking.Services.Contracts
+@using System.Text.Json
+
+
+@inject IJSRuntime _jsRuntime;
 
 @inject IHotelService _hotelService
 @inject NavigationManager NavigationManager
@@ -82,11 +86,12 @@
                             <MudTypography Typo="Typo.caption">@hotel.Description</MudTypography>
                         </MudCardContent>
                         <MudCardActions>
-                            <MudButton Color="Color.Primary">Подробнее</MudButton>
+                            <MudButton Color="Color.Primary" OnClick="@(() => NavigateToHotelPage(hotel))">Подробнее</MudButton>
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
             }
+            
         }
         else
         {
@@ -207,8 +212,14 @@
         Console.WriteLine($"Sending filter to GetAvailableHotels: {filter}");
 
         filteredHotels = await _hotelService.GetAvailableHotels(filter);
-        
-    }
 
+    }
+    private async void NavigateToHotelPage(HotelDto hotel)
+    {
+        var roomsJson = JsonSerializer.Serialize(cards);
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "selectedRooms", roomsJson);
+        NavigationManager.NavigateTo($"/hotel/{hotel.Id}");
+          
+    }
 
 }

@@ -1,5 +1,6 @@
 ﻿
 using HotelBooking.Services.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace HotelBooking.Midleware
 {
@@ -7,20 +8,24 @@ namespace HotelBooking.Midleware
     {
         private readonly RequestDelegate _next;
         private readonly ITokenService _tokenService;
-
-        public TokenMiddleware(RequestDelegate next, ITokenService tokenService)
+        private readonly ILogger<TokenMiddleware> _logger;
+        public TokenMiddleware(RequestDelegate next, ITokenService tokenService, ILogger<TokenMiddleware> logger)
         {
             _next = next;
             _tokenService = tokenService;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
         {
             if (RequiresAuthorization(context))
             {
-                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-                if (!string.IsNullOrEmpty(token) && _tokenService.ValidateToken(token))
+                var authorizationHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                
+                var token =  authorizationHeader.Substring("Bearer ".Length).Trim();
+                _logger.LogInformation($"Authorization header value: {token}");
+                if (_tokenService.ValidateToken(token))
                 {
                     await _next(context);
                 }
@@ -39,8 +44,15 @@ namespace HotelBooking.Midleware
 
         private bool RequiresAuthorization(HttpContext context)
         {
+            var pathsRequiringAuthorization = new List<string>
+            {
+                 "/api/HotelBooking/User/token",
+                 "/api/account/getId",
+                 
+            };
+
+            return pathsRequiringAuthorization.Any(path => context.Request.Path.StartsWithSegments(path));
             
-           return context.Request.Path.StartsWithSegments("/api/HotelBooking/User/updateAccount");
            
         }
     }

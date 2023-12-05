@@ -1,6 +1,8 @@
 ﻿using HotelBooking.BookingDTO.TokenDtos;
+using HotelBooking.Services.Contracts;
 using Microsoft.JSInterop;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 namespace HotelBooking.Web.Requests
 {
@@ -37,7 +39,7 @@ public class ApiTokenService
         public async Task<string> AuthenticateAndSetToken(string username, int userId)
         {
             
-            var response = await _httpClient.PostAsJsonAsync("/api/token/generate", new TokenDto
+            var response = await _httpClient.PostAsJsonAsync("/api/account/generate", new TokenDto
             {
                 Username = username,
                 UserId = userId
@@ -59,14 +61,16 @@ public class ApiTokenService
 
         public async Task<int> GetUserIdFromToken()
         {
+
+
             var token = await GetToken();
 
             if (string.IsNullOrEmpty(token))
             {
                 return -1;
             }
-
-            var userIdResponse = await _httpClient.GetAsync($"/api/token/getId/{token}");
+            await SetAuthorizationHeader();
+            var userIdResponse = await _httpClient.GetAsync($"/api/account/getId/{token}");
 
             if (!userIdResponse.IsSuccessStatusCode)
             {
@@ -84,7 +88,16 @@ public class ApiTokenService
                 return -1;
             }
         }
+        private async Task SetAuthorizationHeader()
+        {
 
+            var token = await GetToken();
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            
+        }
         private class AuthenticationResponse
         {
             public string Token { get; set; }

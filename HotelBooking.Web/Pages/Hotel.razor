@@ -1,0 +1,73 @@
+﻿@page "/hotel/{hotelId:int}"
+
+@using HotelBooking.BookingDTO.HotelDtos
+@using HotelBooking.BookingDTO.RoomDtos
+@using HotelBooking.Services.Contracts
+@using Microsoft.AspNetCore.Components.Web
+@using System.Text.Json
+
+@inject IJSRuntime JSRuntime
+@inject IHotelService _hotelService;
+<MudContainer>
+    <MudPaper Class="mud-elevation-3 p-4">
+        @if (hotel != null)
+        {
+            <MudTypography Typo="Typo.h4" Class="mb-2">@hotel.Name</MudTypography>
+            <MudTypography Typo="Typo.subtitle1" Class="mb-4">@hotel.Description</MudTypography>
+            <MudRating ReadOnly="true" SelectedValue="@hotel.Rating" />
+        }
+        else
+        {
+            <MudTypography Typo="Typo.body1" Class="mud-text-center mt-4">Информация о отеле не найдена</MudTypography>
+        }
+    </MudPaper>
+    <div>
+        <MudTypography Typo="Typo.h6" Class="mb-2">Информация о номерах:</MudTypography>
+        @if (rooms != null && rooms.Any())
+        {
+            <ul>
+                @foreach (var room in rooms)
+                {
+                    <li>@room.Capacity</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No room information available</p>
+        }
+    </div>
+</MudContainer>
+
+@code {
+    private HotelDto hotel;
+    private List<RoomCardDto> rooms;
+
+    [Parameter]
+    public int hotelId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Получение информации о номерах из localStorage
+        var roomInfoJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "selectedRooms");
+
+
+
+        // Assuming the JSON structure is an array directly
+        rooms = JsonSerializer.Deserialize<List<RoomCardDto>>(roomInfoJson);
+
+        // Now you can use the 'roomsArray' directly
+        // For example, if it's an array of room capacities:
+        foreach (var roomCapacity in rooms)
+        {
+            Console.WriteLine($"Room Capacity: {roomCapacity}");
+        }
+
+
+        hotel = await  _hotelService.GetById(hotelId);
+        
+    }
+    //getroomsifhaverooms
+    //getallroomswithfilter
+    //room card navigate booking
+}

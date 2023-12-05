@@ -36,9 +36,14 @@ namespace HotelBooking.Web.Requests
 			}
 		}
 
-		public Task<HotelDto> GetById(int id)
+		public async Task<HotelDto> GetById(int id)
 		{
-			throw new NotImplementedException();
+			var response = await _httpClient.GetAsync($"api/HotelBooking/Hotel/{id}");
+			if(response.IsSuccessStatusCode)
+			{
+				return await response.Content.ReadAsAsync<HotelDto>();
+			}
+			else { throw new HttpRequestException($"Failed to get hotels. Status code: {response.StatusCode}. Reason: {response.ReasonPhrase}"); }
 		}
 
 		public Task<List<HotelDto>> GetHotels()

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.BookingDTO", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.Web", "HotelBooking.Web\HotelBooking.Web.csproj", "{3083B414-9460-4213-9464-69FB3D13132D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBooking.UnitTests", "HotelBooking.UnitTests\HotelBooking.UnitTests.csproj", "{EDFE0849-B407-4862-B5DF-D41720C44200}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking.UnitTests", "HotelBooking.UnitTests\HotelBooking.UnitTests.csproj", "{EDFE0849-B407-4862-B5DF-D41720C44200}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
