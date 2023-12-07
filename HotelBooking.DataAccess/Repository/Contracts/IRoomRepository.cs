@@ -7,5 +7,6 @@
         Task<int> Create(Room room);
         Task Update(Room room);
         Task Delete(Room room);
-    }
+		Task<List<Room>> GetAvailableRoomsByHotelIdAndDate(int hotelId, DateTime checkInDate, DateTime checkOutDate);
+	}
 }

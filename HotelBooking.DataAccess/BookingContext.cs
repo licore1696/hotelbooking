@@ -13,6 +13,7 @@ namespace HotelBooking.DataAccess
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -9,6 +9,7 @@ namespace HotelBooking.Entities
         public int? UserId { get; set; }
         public int Rating { get; set; }
         public string Comment { get; set; }
+        [Column(TypeName = "DATE")]
         public DateTime CreatedAt { get; set; }
 
         [ForeignKey("HotelId")]

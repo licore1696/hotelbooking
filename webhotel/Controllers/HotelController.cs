@@ -1,6 +1,9 @@
 ﻿using HotelBooking.BookingDTO.HotelDtos;
+using HotelBooking.BookingDTO.RoomDtos;
+using HotelBooking.BookingDTO.Search;
 using HotelBooking.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using static HotelBooking.BookingDTO.Search.SearchDto;
 
 namespace HotelBooking.Controllers
 {
@@ -20,7 +23,13 @@ namespace HotelBooking.Controllers
             return await _hotelService.GetById(id);
         }
 
-        [HttpPost]
+		[HttpPost("GetAvailableHotels")]//или лучше просто get? причина post данные передачи(List)
+		public async Task<ActionResult<List<HotelDto>>> GetAvailableHotels([FromBody] SearchDto searchDto)
+		{
+			return await _hotelService.GetAvailableHotels(searchDto);
+		}
+
+		[HttpPost]
         public async Task<ActionResult<int>> Create([FromBody] HotelDto hotel)
         {
             return await _hotelService.Create(hotel);

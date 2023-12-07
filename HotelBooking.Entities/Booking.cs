@@ -7,7 +7,9 @@ namespace HotelBooking.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         public int RoomId { get; set; }
+        [Column(TypeName = "DATE")]
         public DateTime CheckInDate { get; set; }
+        [Column(TypeName = "DATE")]
         public DateTime CheckOutDate { get; set; }
         public decimal TotalPrice { get; set; }
         public string Status { get; set; } // подтверждено, ожидает подтверждения, отменено 

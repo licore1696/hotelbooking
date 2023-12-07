@@ -32,7 +32,12 @@ namespace HotelBooking.DataAccess.Repository
             return await _context.Hotels.ToListAsync();
         }
 
-        public async Task Update(Hotel hotel)
+		public async Task<List<Hotel>> GetHotelsByCountryAndCity(string country, string city)
+		{
+            return await _context.Hotels.Where(h => h.Country.Contains(country) && h.City.Contains(city)).ToListAsync();//выбирать по количеству комнат 
+		}
+
+		public async Task Update(Hotel hotel)
         {
             _context.Hotels.Update(hotel);
             await _context.SaveChangesAsync();

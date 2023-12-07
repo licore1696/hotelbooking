@@ -6,6 +6,7 @@ using HotelBooking.Services.Contracts;
 using HotelBooking.Services;
 using AutoMapper;
 using HotelBooking.Mappings;
+using HotelBooking.Midleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,9 @@ builder.Services.AddScoped<IRoomService, RoomService>();//singleton
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();//singleton
 builder.Services.AddScoped<IReviewService, ReviewService>();//singleton
 
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddAutoMapper(typeof(UserProfile));
 
@@ -53,7 +57,6 @@ builder.Services.AddAutoMapper(typeof(RoomProfile));
 builder.Services.AddAutoMapper(typeof(BookingProfile));
 
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -63,8 +66,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+
+app.UseMiddleware<TokenMiddleware>();
+
+app.UseHttpsRedirection();
+
 app.UseAuthorization();
 
 app.MapControllers();
