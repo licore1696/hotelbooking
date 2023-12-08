@@ -48,7 +48,7 @@ namespace HotelBooking.Midleware
             {
                  "/api/HotelBooking/User/token",
                  "/api/account/getId",
-                 
+                 "/api/HotelBooking/Booking/token",
             };
 
             return pathsRequiringAuthorization.Any(path => context.Request.Path.StartsWithSegments(path));

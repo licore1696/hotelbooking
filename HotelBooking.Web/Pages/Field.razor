@@ -15,11 +15,11 @@
 <MudContainer>
     <MudGrid Spacing="0">
         <MudItem xs="3" sm="3">
-            <MudAutocomplete T="string" Label="Выберите город" @bind-Value="location"
+            <MudAutocomplete T="string" Label="Выберите город" @bind-Value="location" Required="true"
                  SearchFunc="@Search" ToStringFunc="@((string location) => location)"> </MudAutocomplete>
         </MudItem>
         <MudItem xs="4" Class="mud-width-70">
-        <MudDateRangePicker Label="Basic range picker" @bind-DateRange="_dateRange" />
+            <MudDateRangePicker Label="Basic range picker" @bind-DateRange="_dateRange" Required="true" />
         </MudItem>
         <MudItem xs="4" sm="4">
             <MudExpansionPanel Variant="Variant.Text">@*будет переделать на mudselect с кастомными полями*@
@@ -218,6 +218,15 @@
     {
         var roomsJson = JsonSerializer.Serialize(cards);
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "selectedRooms", roomsJson);
+
+        var datesJson = JsonSerializer.Serialize(new
+        {
+            Checkin = _dateRange.Start.GetValueOrDefault(),
+            Checkout = _dateRange.End.GetValueOrDefault()
+        });
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "selectedDates", datesJson);
+
+
         NavigationManager.NavigateTo($"/hotel/{hotel.Id}");
           
     }

@@ -10,6 +10,7 @@ public class Hotel
 	public string Country { get; set; }
 	public decimal PricePerNight { get; set; }
     public double Rating { get; set; }
+    public int Stars {  get; set; }
 
     public List<Room> Rooms { get; set; }
     public List<Review> Reviews { get; set; }

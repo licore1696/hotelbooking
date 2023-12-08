@@ -21,7 +21,7 @@ namespace BookingBooking.Controllers
             return await _bookingService.GetById(id);
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<ActionResult<int>> Create([FromBody] BookingDto booking)
         {
             return await _bookingService.Create(booking);
@@ -32,6 +32,12 @@ namespace BookingBooking.Controllers
         {
             var bookings = await _bookingService.GetBookings();
             return Ok(bookings);
+        }
+
+        [HttpGet("token/BookingsByUser/{userId}")]
+        public async Task<ActionResult<List<BookingDto>>> GetBookingsbyUser(int userId)
+        {
+            return await _bookingService.GetBookingsByUserId(userId);
         }
 
         [HttpPut]

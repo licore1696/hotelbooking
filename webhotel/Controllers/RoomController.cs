@@ -1,6 +1,8 @@
 ﻿using HotelBooking.BookingDTO.RoomDtos;
+using HotelBooking.BookingDTO.SearchDtos;
 using HotelBooking.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace HotelBooking.Controllers
 {
@@ -33,7 +35,15 @@ namespace HotelBooking.Controllers
             return Ok(rooms);
         }
 
-        [HttpPut]
+        [HttpPost("FilterRoom")]
+        public async Task<ActionResult<List<RoomDto>>> filterRooms(FilterRoomDto filter)
+        {
+            var rooms = await _roomService.GetFilteredRooms(filter);
+            return rooms;   
+        }
+
+
+    [HttpPut]
         public async Task<IActionResult> Update([FromBody] RoomDto roomDto)
         {
             var updatedRoomDto = await _roomService.Update(roomDto);

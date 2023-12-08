@@ -1,4 +1,6 @@
 ﻿using HotelBooking.BookingDTO.RoomDtos;
+using HotelBooking.BookingDTO.Search;
+using HotelBooking.BookingDTO.SearchDtos;
 
 namespace HotelBooking.Services.Contracts
 {
@@ -9,6 +11,7 @@ namespace HotelBooking.Services.Contracts
         Task<List<RoomDto>> GetRooms();
         Task<RoomDto> Update(RoomDto roomDto);
         Task<bool> Delete(int id);
+        Task<List<RoomDto>> GetFilteredRooms(FilterRoomDto filter);
         
     }
 }

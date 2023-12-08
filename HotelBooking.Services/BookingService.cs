@@ -41,6 +41,12 @@ namespace HotelBooking.Services
             return _mapper.Map<List<BookingDto>>(bookings);
         }
 
+        public async Task<List<BookingDto>> GetBookingsByUserId(int userId)
+        {
+            var bookings = await _bookingRepository.GetBookingsByUser(userId);
+            return _mapper.Map<List<BookingDto>>(bookings);
+        }
+
         public async Task<BookingDto> GetById(int id)
         {
             var booking = await _bookingRepository.GetById(id);
