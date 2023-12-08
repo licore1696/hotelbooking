@@ -1,4 +1,4 @@
-﻿@page "/filter"
+﻿@page "/"
 @using HotelBooking.BookingDTO.HotelDtos
 @using HotelBooking.BookingDTO.RoomDtos
 @using HotelBooking.BookingDTO.Search
@@ -21,15 +21,16 @@
         <MudItem xs="4" Class="mud-width-70">
             <MudDateRangePicker Label="Basic range picker" @bind-DateRange="_dateRange" Required="true" />
         </MudItem>
-        <MudItem xs="4" sm="4">
-            <MudExpansionPanel Variant="Variant.Text">@*будет переделать на mudselect с кастомными полями*@
-                <TitleContent>
+        <MudItem xs="4">
+            <div class="d-flex" style="height: 100%;">
+                <MudButton @onclick="ToggleMenu" Id="menuButton" Variant="Variant.Text" Color="Color.Default" FullWidth="true" style="height: 100%;">
                     <div class="d-flex">
-                       <MudText>@persons().ToString() @namePersons(), @roomcount().ToString() @nameRooms() </MudText>  
+                        <MudText>@persons().ToString() @namePersons(), @roomcount().ToString() @nameRooms()</MudText>
                     </div>
-                </TitleContent>
-                <ChildContent>
-                    <ExpansionPanelDetails>
+                </MudButton>
+                <MudPopover AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Open="@isMenuVisible" >
+                
+                   
                         <div class="d-flex flex-column w-100">
                                 @foreach (var (card, index) in cards.Select((card, index) => (card, index)))
                             {
@@ -60,9 +61,10 @@
                                 <MudButton OnClick="@AddRoomCardDto" Color="Color.Primary">+ Добавить номер</MudButton>
                             }
                         </div>
-                    </ExpansionPanelDetails>
-                </ChildContent>
-            </MudExpansionPanel>
+                    
+                
+                </MudPopover>
+            </div>
         </MudItem>
         <MudItem xs = "1">
             <MudButton OnClick="@Hotels" Size="Size.Large" Variant="Variant.Filled" Color="Color.Primary">Найти</MudButton>
@@ -100,6 +102,7 @@
     </MudGrid>
 </MudContainer>
 @code {
+    public bool isMenuVisible { get; set; } = false;
     private MudDateRangePicker _picker;
     private DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
     private bool _autoClose;
@@ -108,8 +111,9 @@
 
     private void ToggleMenu()
     {
-        _isMenuOpen = !_isMenuOpen;
+        isMenuVisible = !isMenuVisible;
     }
+
 
     private class Icons
     {
@@ -181,11 +185,12 @@
     private bool IsAddRoomDisabled() => cards.Count >= 6;
     private bool IsAddDisabled(RoomCardDto card) => card.Capacity >= 6;
     private bool IsSubtractDisabled(RoomCardDto card) => card.Capacity <= 1;
-    protected override void OnInitialized()
+    protected override async  void  OnInitialized()
     {
         base.OnInitialized();
-
+        location = "Париж, Франция";
         cards.Add(new RoomCardDto { Capacity = 2 });
+        await Hotels();
     }
 
     private async Task Hotels()

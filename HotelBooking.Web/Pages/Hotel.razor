@@ -31,14 +31,15 @@
         <MudDateRangePicker Label="Basic range picker" @bind-DateRange="_dateRange" />
         </MudItem>
         <MudItem xs="5">
-            <MudExpansionPanel Variant="Variant.Text">@*будет переделать на mudselect с кастомными полями*@
-                <TitleContent>
+            <div class="d-flex" style="height: 100%;">
+                <MudButton @onclick="ToggleMenu" Id="menuButton" Variant="Variant.Text" Color="Color.Default" FullWidth="true" style="height: 100%;">
                     <div class="d-flex">
-                       <MudText>@persons().ToString() @namePersons(), @roomcount().ToString() @nameRooms() </MudText>  
+                        <MudText>@persons().ToString() @namePersons(), @roomcount().ToString() @nameRooms()</MudText>
                     </div>
-                </TitleContent>
-                <ChildContent>
-                    <ExpansionPanelDetails>
+                </MudButton>
+                <MudPopover AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Open="@isMenuVisible" >
+                
+                   
                         <div class="d-flex flex-column w-100">
                                 @foreach (var (card, index) in cards.Select((card, index) => (card, index)))
                             {
@@ -69,9 +70,10 @@
                                 <MudButton OnClick="@AddRoomCardDto" Color="Color.Primary">+ Добавить номер</MudButton>
                             }
                         </div>
-                    </ExpansionPanelDetails>
-                </ChildContent>
-            </MudExpansionPanel>
+                    
+                
+                </MudPopover>
+            </div>
         </MudItem>
         <MudItem xs="2">
             <MudButton OnClick="@ShowRooms" Size="Size.Large" Variant="Variant.Filled" Color="Color.Primary">Найти</MudButton>
@@ -82,7 +84,7 @@
     <MudGrid Spacing="2">
         <style>
             .container {
-                width: 50%;
+                width: 100%;
                 margin: 20px auto; /* отступ сверху */
                 border: 1px solid #ccc;
                 padding: 10px;
@@ -92,10 +94,20 @@
                 align-items: center;
             }
 
+            .cell {
+                flex: 2; /* Каждая ячейка занимает равный процент ширины */
+                padding: 10px;
+                overflow: hidden; /* Предотвращает выход содержимого за границы ячейки */
+                box-sizing: border-box; /* С учетом padding и border при расчете размеров */
+            }
+
             .separator {
                 border-left: 1px solid #ccc; /* вертикальные разделители */
                 height: 100%; /* чтобы разделители были одинаковой высоты */
                 margin: 0 10px;
+            }
+            .small-cell {
+            flex: 0.4; /* Настройте ширину ячейки по вашему усмотрению */
             }
         </style>
         @if (filteredRooms != null && filteredRooms.Any())
@@ -105,21 +117,21 @@
                 
 
                 <div class="container">
-                    <div>
+                    <div class="cell">
                         <span>@room.RoomType</span>
                         <hr />
                         <span>@room.Description</span>
                     </div>
                     <div class="separator"></div>
-                    <div>
-                        <span>2</span>
-                    </div>
+                    <div class="cell small-cell">
+                        <span>@room.Capacity</span>
+                    </div >
                     <div class="separator"></div>
-                    <div>
+                    <div class="cell small-cell">
                         <span>$@room.PricePerNight</span>
                     </div>
                     <div class="separator"></div>
-                    <div>
+                    <div class="cell small-cell">
 						@if (isRoomInCart(room))
 						{
 							<MudButton OnClick="@(() => RemoveFromCart(room))" Color="Color.Error">Убрать из корзины</MudButton>
@@ -148,7 +160,8 @@
 
 @code {
     private HotelDto hotel;
-
+    public bool isMenuVisible { get; set; } = false;
+    
     private MudDateRangePicker _picker;
     private DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
     private bool _autoClose;
@@ -196,6 +209,10 @@
     {
         var newRoomCardDto = new RoomCardDto { Capacity = 1 };
         cards.Add(newRoomCardDto);
+    }
+    private void ToggleMenu()
+    {
+        isMenuVisible = !isMenuVisible;
     }
 
     private void RemoveRoomCardDto(RoomCardDto card)

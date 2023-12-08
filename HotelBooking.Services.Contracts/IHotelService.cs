@@ -12,5 +12,6 @@ namespace HotelBooking.Services.Contracts
         Task<bool> Delete(int id);
         Task<List<HotelDto>> GetAvailableHotels(SearchDto searchDto);
         
-		}
+        
+    }
 }

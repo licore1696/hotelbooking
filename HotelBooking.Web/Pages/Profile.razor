@@ -161,12 +161,13 @@
         {
             userId = await _tokenService.GetUserIdFromToken();
             if (userId == -1) { NavigationManager.NavigateTo("/login"); Snackbar.Add("Действие ссессии прекращено", Severity.Error); }
-
-            await LoadUserData();
-            var bookings = await _bookingService.GetBookingsByUserId(userId);
-            GetCurrentBookings(bookings);
-            GetHistoryBookings(bookings);
-
+            else
+            {
+                await LoadUserData();
+                var bookings = await _bookingService.GetBookingsByUserId(userId);
+                GetCurrentBookings(bookings);
+                GetHistoryBookings(bookings);
+            }
         }
     }
     public void GetHistoryBookings(List<BookingDto> allBookings)
