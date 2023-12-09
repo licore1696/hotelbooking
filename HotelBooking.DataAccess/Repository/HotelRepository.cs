@@ -37,7 +37,23 @@ namespace HotelBooking.DataAccess.Repository
             return await _context.Hotels.Where(h => h.Country.Contains(country) && h.City.Contains(city)).ToListAsync();//выбирать по количеству комнат 
 		}
 
-		public async Task Update(Hotel hotel)
+        public async Task<List<string>> GetImagesByHotel(int id)
+        {
+            var hotel = await _context.Hotels
+            .Where(h => h.Id == id)
+            .FirstOrDefaultAsync();
+
+            if (hotel != null)
+            {
+                // Assuming Images is not null, you might want to handle null case based on your requirements
+                return hotel.Images ?? new List<string>();
+            }
+
+            return new List<string>();
+
+        }
+
+        public async Task Update(Hotel hotel)
         {
             _context.Hotels.Update(hotel);
             await _context.SaveChangesAsync();

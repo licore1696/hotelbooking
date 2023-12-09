@@ -9,6 +9,7 @@
         public string Country { get; set; }
         public int Stars { get; set; }
         public decimal PricePerNight { get; set; }
+        public List<string> Images { get; set; }
         public int Rating { get; set; }
     }
 }

@@ -72,26 +72,138 @@
         
     </MudGrid>
 </MudContainer>
-<MudContainer>
+<MudContainer Class="pa-10">
     <MudGrid Spacing="2">
         @if (filteredHotels != null && filteredHotels.Any())
         {
             @foreach (var hotel in filteredHotels)
             {
-                <MudItem xs="12" sm="6" md="4" lg="3">
-                    <MudCard>
-                        <MudCardMedia>
-                            <img src="" alt="@hotel.Name" />
-                        </MudCardMedia>
-                        <MudCardContent>
-                            <MudTypography Typo="Typo.h6" Class="mb-2">@hotel.Name</MudTypography>
-                            <MudTypography Typo="Typo.caption">@hotel.Description</MudTypography>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Color="Color.Primary" OnClick="@(() => NavigateToHotelPage(hotel))">Подробнее</MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
+                <style>
+                    .flex-container {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                    }
+
+                    .hotelCard {
+                        width: 100%;
+                        display: flex;
+                    }
+
+                    .image_card {
+                        width: 184px; /* Установите ширину изображения */
+                        height: auto;
+                        margin-right: 10px; /* Отступ справа от изображения */
+                    }
+
+                    .relative-position {
+                        flex-grow: 1; /* Занимает оставшееся пространство */
+                    }
+
+                    .flex-item .relative-position {
+                        flex-grow: 1;
+                        padding-bottom: 8px;
+                    }
+
+                    .flex-container.align-start {
+                        align-items: flex-start;
+                        height: 24px;
+                        margin-top: 16px;
+                    }
+
+                    .baseline-align {
+                        align-items: baseline;
+                        display: flex;
+                    }
+
+                    .flex-item .text-large, .flex-item .text-bold {
+                        font-size: 21px;
+                        line-height: 28px;
+                    }
+
+                    .center-align {
+                        align-items: center;
+                        display: flex;
+                    }
+
+                    .text-medium {
+                        font-size: 15px;
+                    }
+
+                    .text-bold, .text-large {
+                        font-size: 21px;
+                        line-height: 28px;
+                    }
+
+                    .text-bold {
+                        align-items: center;
+                        color: var(--color-black);
+                        display: flex;
+                        font-weight: 500;
+                        min-width: 0;
+                    }
+
+                    .text-large {
+                        font-weight: 700;
+                        margin-left: 16px;
+                    }
+
+                    .hotelCard {
+                        display: flex;
+                    }
+                </style>
+
+                <div class="hotelCard">
+                    <div class="image_card">
+                        <MudImage Src=@($"/images/{hotel.Id}/preview.jpg" ) Width="184" Alt="hotel preview" Elevation="25" Class="rounded-lg" />
+                    </div>
+                    <div class="relative-position">
+                        <div class="flex-container align-start">
+                            <div>
+                                <div class="rating-container">
+                                    <div class="baseline-align rating">
+                                        <div class="rating-value bold-text">@hotel.Rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-container hotel-info">
+                            <div class="center-align">
+                                <div class="rating-stars">
+                                    <MudRating ReadOnly="true" SelectedValue="@hotel.Stars" />
+                                </div>
+                                <div class="text-medium">Отель</div>
+                            </div>
+                        </div>
+                        <div class="flex-container hotel-name">
+                            <div class="text-bold">
+                                <div class="hotel-title" title="@hotel.Name">
+                                    <span><span class="">@hotel.Name</span></span>
+                                </div>
+                            </div>
+                            <span class="price text-large">
+                                <span>@hotel.PricePerNight $</span>
+
+                                <span></span>
+                            </span>
+                        </div>
+                        <div class="flex-container location-info">
+                            <div class="location-text"><span class="city-name">@hotel.Country, </span><span class="distance-to-center">@hotel.Address</span></div>
+                        </div>
+                        <div class="flex-container action-buttons">
+                            <div class="button-container">
+                                <div class="button-wrapper">
+                                    <div class="button-placeholder">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="button-primary large-button">
+                                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@(() => NavigateToHotelPage(hotel))">Выбрать</MudButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             
         }

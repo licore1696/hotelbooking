@@ -7,6 +7,7 @@
         Task<int> Create(Hotel hotel);
         Task Update(Hotel hotel);
         Task Delete(Hotel hotel);
+        Task<List<string>> GetImagesByHotel(int id);
         Task<List<Hotel>> GetHotelsByCountryAndCity(string country, string city);
 	}
 }

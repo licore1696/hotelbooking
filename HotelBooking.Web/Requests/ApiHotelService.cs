@@ -1,6 +1,7 @@
 ﻿using HotelBooking.BookingDTO.HotelDtos;
 using HotelBooking.BookingDTO.Search;
 using HotelBooking.Services.Contracts;
+using System.Net.Http.Json;
 
 namespace HotelBooking.Web.Requests
 {
@@ -51,7 +52,19 @@ namespace HotelBooking.Web.Requests
 			throw new NotImplementedException();
 		}
 
-		public Task<HotelDto> Update(HotelDto hotelDto)
+        public async Task<List<string>> GetImagesById(int id)
+        {
+			var response = await _httpClient.GetFromJsonAsync<List<string>>($"api/HotelBooking/Hotel/images/{id}");
+            return response ?? throw new HttpRequestException("Couldn't get images");
+        }
+      
+
+        public Task<HotelImageDto> SetImages(HotelImageDto hotelImageDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HotelDto> Update(HotelDto hotelDto)
 		{
 			throw new NotImplementedException();
 		}
