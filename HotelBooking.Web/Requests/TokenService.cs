@@ -72,16 +72,16 @@ public class ApiTokenService
             await SetAuthorizationHeader();
             var userIdResponse = await _httpClient.GetAsync($"/api/account/getId/{token}");
 
-            if (!userIdResponse.IsSuccessStatusCode)
+            if (userIdResponse.IsSuccessStatusCode)
             {
-                return -1;
-            }
+            
 
-            var userIdString = await userIdResponse.Content.ReadAsStringAsync();
+                var userIdString = await userIdResponse.Content.ReadAsStringAsync();
 
-            if (int.TryParse(userIdString, out var userId))
-            {
-                return userId;
+                 int.TryParse(userIdString, out var userId);
+                
+                     return userId;
+                
             }
             else
             {

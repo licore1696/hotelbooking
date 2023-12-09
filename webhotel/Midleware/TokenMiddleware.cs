@@ -1,4 +1,5 @@
 ﻿
+using HotelBooking.Entities;
 using HotelBooking.Services.Contracts;
 using Microsoft.Extensions.Logging;
 
@@ -49,6 +50,7 @@ namespace HotelBooking.Midleware
                  "/api/HotelBooking/User/token",
                  "/api/account/getId",
                  "/api/HotelBooking/Booking/token",
+                 "/api/HotelBooking/Review/token/"
             };
 
             return pathsRequiringAuthorization.Any(path => context.Request.Path.StartsWithSegments(path));

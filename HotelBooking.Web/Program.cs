@@ -15,6 +15,7 @@ builder.Services.AddScoped<IUserService, ApiUserService>();
 builder.Services.AddScoped<IHotelService, ApiHotelService>();
 builder.Services.AddScoped<IRoomService, ApiRoomService>();
 builder.Services.AddScoped<IBookingService, ApiBookingService>();
+builder.Services.AddScoped<IReviewService, ApiReviewService>();
 builder.Services.AddScoped<ApiTokenService>();
 builder.Services.AddScoped(sp => new HttpClient 
 { 
