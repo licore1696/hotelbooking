@@ -11,6 +11,7 @@ namespace HotelBooking.Services.Contracts
         Task<HotelDto> Update(HotelDto hotelDto);
         Task<bool> Delete(int id);
         Task<List<HotelDto>> GetAvailableHotels(SearchDto searchDto);
-        
-		}
+        Task<List<string>> GetImagesById(int id);
+        Task<HotelImageDto> SetImages(HotelImageDto hotelImageDto);
+    }
 }

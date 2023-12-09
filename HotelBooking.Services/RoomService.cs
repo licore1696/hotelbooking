@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HotelBooking.BookingDTO.RoomDtos;
+using HotelBooking.BookingDTO.SearchDtos;
 using HotelBooking.DataAccess.Repository.Contracts;
 using HotelBooking.Services.Contracts;
 
@@ -40,6 +41,12 @@ namespace HotelBooking.Services
             return _mapper.Map<RoomDto>(room);
         }
 
+        public async Task<List<RoomDto>> GetFilteredRooms(FilterRoomDto filter)
+        {
+            var rooms = await _roomRepository.GetFilteredRooms(filter.guests,filter.Checkin, filter.CheckOut,filter.hotelId);
+            return _mapper.Map<List<RoomDto>>(rooms);
+        }
+
         public async Task<List<RoomDto>> GetRooms()
         {
             var rooms = await _roomRepository.GetRooms();
@@ -62,5 +69,7 @@ namespace HotelBooking.Services
             return _mapper.Map<RoomDto>(existingRoom);
 
         }
+
+        
     }
 }

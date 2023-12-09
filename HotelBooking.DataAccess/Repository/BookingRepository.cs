@@ -34,7 +34,12 @@ namespace HotelBooking.DataAccess.Repository
 			   ((b.CheckInDate >= checkInDate && b.CheckInDate <= checkOutDate) )).ToListAsync();
 		}
 
-		public async Task<Booking> GetById(int id)
+        public async Task<List<Booking>> GetBookingsByUser(int userId)
+        {
+            return await _context.Bookings.Where(b => b.UserId == userId).ToListAsync();
+        }
+
+        public async Task<Booking> GetById(int id)
         {
             return await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
         }

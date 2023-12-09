@@ -20,7 +20,7 @@ namespace HotelBooking.Controllers
             return await _reviewService.GetById(id);
         }
 
-        [HttpPost]
+        [HttpPost("token/Review")]
         public async Task<ActionResult<int>> Create([FromBody] ReviewDto review)
         {
             return await _reviewService.Create(review);

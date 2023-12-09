@@ -9,6 +9,7 @@ namespace HotelBooking.Mappings
         {
             CreateMap<Hotel, HotelDto>().ReverseMap();
             CreateMap<Hotel, CreateHotelDto>().ReverseMap();
+            CreateMap<Hotel, HotelImageDto>().ReverseMap();
         }
     }
 }

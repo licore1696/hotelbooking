@@ -119,5 +119,27 @@ namespace HotelBooking.Services
 
 			return capacityCounterB.All(kv => capacityCounterA.ContainsKey(kv.Key) && capacityCounterA[kv.Key] >= kv.Value);
 		}
-	}
+
+        public async Task<List<string>> GetImagesById(int id)
+        {
+            return await _hotelRepository.GetImagesByHotel(id);
+        }
+
+        public async Task<HotelImageDto> SetImages(HotelImageDto hotelImageDto)
+        {
+            var existingHotel = await _hotelRepository.GetById(hotelImageDto.Id);
+            if (existingHotel == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(hotelImageDto, existingHotel);
+
+            await _hotelRepository.Update(existingHotel);
+
+            return _mapper.Map<HotelImageDto>(existingHotel);
+
+       
+        }
+    }
 }

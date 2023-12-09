@@ -46,6 +46,18 @@ namespace HotelBooking.DataAccess.Repository
             return await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<List<Room>> GetFilteredRooms(int guests, DateTime checkInDate, DateTime checkOutDate,int hotelId)
+        {
+            var availableRooms = await _context.Rooms.Include(r => r.Bookings)
+           .Where(r => r.Capacity <= guests)
+           .Where(r => r.HotelId == hotelId)
+              .Where(room => !room.Bookings.Any(booking =>
+                    (checkInDate <= booking.CheckOutDate && checkOutDate >= booking.CheckInDate)))
+           .ToListAsync();
+
+            return availableRooms;
+        }
+
         public async Task<List<Room>> GetRooms()
         {
             return await _context.Rooms.ToListAsync();

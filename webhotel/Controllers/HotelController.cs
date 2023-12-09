@@ -42,6 +42,16 @@ namespace HotelBooking.Controllers
             return Ok(hotels);
         }
 
+        [HttpGet("images/{id}")]
+        public async Task<ActionResult<List<string>>> GetImages(int id)
+        {
+            return await _hotelService.GetImagesById(id);
+        }
+        [HttpPut("setimages/")]
+        public async Task<ActionResult<HotelImageDto>> SetImagesByHotelId(HotelImageDto hotelImageDto)
+        {
+            return await _hotelService.SetImages(hotelImageDto);
+        }
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] HotelDto hotelDto)
         {

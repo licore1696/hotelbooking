@@ -1,6 +1,7 @@
 ﻿@page "/profile/"
 
 @using HotelBooking.BookingDTO
+@using HotelBooking.BookingDTO.BookingDTOs
 @using HotelBooking.BookingDTO.UserDTOs
 @using HotelBooking.Services.Contracts
 @using HotelBooking.Web.Requests
@@ -9,6 +10,7 @@
 @inject IUserService _userService
 @inject NavigationManager NavigationManager
 @inject ApiTokenService _tokenService
+@inject IBookingService _bookingService
 
 <MudContainer>
     <MudPaper Elevation="0" Class="p-6" Style="max-width: 400px; margin: auto; margin-top: 100px; text-align: center;">
@@ -30,12 +32,60 @@
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="position-relative mb-4" Style="width: 100%; border-radius: 20px;" OnClick="HandleLogout">Выйти</MudButton>
         }
     </MudPaper>
-</MudContainer>
 
-@code {
+</MudContainer>
+<MudTabs>
+    <MudTabPanel Text="Бронирования">
+                <MudTypography Typo="Typo.h5" Class="mb-2">Текущие бронирования</MudTypography>
+
+                <!-- Display current or future bookings using MudTable -->
+                <MudTable Items="@CurrentBookings" Class="mb-4">
+                    <HeaderContent>
+                        <MudTh>Check-in Date</MudTh>
+                        <MudTh>Check-out Date</MudTh>
+                        <MudTh>Total Price</MudTh>
+                        <MudTh>Status</MudTh>
+                        <!-- Add more headers as needed -->
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@context.CheckInDate</MudTd>
+                        <MudTd>@context.CheckOutDate</MudTd>
+                        <MudTd>@context.TotalPrice</MudTd>
+                        <MudTd>@context.Status</MudTd>
+                        <!-- Add more cells as needed -->
+                    </RowTemplate>
+                </MudTable>
+            </MudTabPanel>
+
+        <MudTabPanel Text="История бронирований">
+                <MudTypography Typo="Typo.h5" Class="mb-2">История бронирований</MudTypography>
+
+                <!-- Display booking history using MudTable -->
+                <MudTable Items="@BookingHistory" Class="mb-4">
+                    <HeaderContent>
+                        <MudTh>Check-in Date</MudTh>
+                        <MudTh>Check-out Date</MudTh>
+                        <MudTh>Total Price</MudTh>
+                        <MudTh>Status</MudTh>
+                        <!-- Add more headers as needed -->
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@context.CheckInDate</MudTd>
+                        <MudTd>@context.CheckOutDate</MudTd>
+                        <MudTd>@context.TotalPrice</MudTd>
+                        <MudTd>@context.Status</MudTd>
+                        <!-- Add more cells as needed -->
+                    </RowTemplate>
+                </MudTable>
+            </MudTabPanel>
+        </MudTabs>
+
+
+    @code {
 
     private UpdateUserDto UserData { get; set; } = new UpdateUserDto();
-
+    private List<BookingDto> CurrentBookings = new List<BookingDto>();
+    private List<BookingDto> BookingHistory = new List<BookingDto>();
     private bool isEditMode = false;
 
     [Parameter]
@@ -111,11 +161,35 @@
         {
             userId = await _tokenService.GetUserIdFromToken();
             if (userId == -1) { NavigationManager.NavigateTo("/login"); Snackbar.Add("Действие ссессии прекращено", Severity.Error); }
-            
+            else
+            {
                 await LoadUserData();
-            
-
-            
+                var bookings = await _bookingService.GetBookingsByUserId(userId);
+                GetCurrentBookings(bookings);
+                GetHistoryBookings(bookings);
+            }
         }
+    }
+    public void GetHistoryBookings(List<BookingDto> allBookings)
+    {
+        DateTime currentDate = DateTime.Now;
+
+        // Filter out bookings where the CheckOutDate is earlier than the current date
+        BookingHistory = allBookings
+            .Where(booking => booking.CheckOutDate < currentDate)
+            .ToList();
+
+
+    }
+
+    public void GetCurrentBookings(List<BookingDto> allBookings)
+    {
+        DateTime currentDate = DateTime.Now;
+
+        CurrentBookings = allBookings
+            .Where(booking => booking.CheckOutDate > currentDate)
+            .ToList();
+
+
     }
 }

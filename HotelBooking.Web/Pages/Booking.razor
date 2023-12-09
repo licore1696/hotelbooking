@@ -1,5 +1,128 @@
-﻿<h3>booking</h3>
+﻿@page "/booking"
+@using HotelBooking.BookingDTO.BookingDTOs
+@using HotelBooking.BookingDTO.RoomDtos
+@using HotelBooking.BookingDTO.UserDTOs
+@using HotelBooking.Services.Contracts
+@using HotelBooking.Web.Requests
+@using System.Text.Json
+
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@inject IUserService _userService
+@inject ISnackbar Snackbar
+@inject ApiTokenService _tokenService
+@inject IBookingService _bookingService
+
+<h3>booking</h3>
+
+<MudContainer>
+    <MudPaper>
+        <MudTypography Typo="Typo.h6">Booking Confirmation</MudTypography>
+
+        @if (roomsInCart == null || roomsInCart.Count == 0)
+        {
+            <MudAlert Severity="Severity.Error">No rooms selected for booking.</MudAlert>
+        }
+        else
+        {
+            <MudCardContent>
+                <MudTypography Typo="Typo.h6">Заказ</MudTypography>
+
+                <div class="list-group">
+                    @foreach (var room in roomsInCart)
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">@room.RoomType</h5>
+                            <p class="mb-1">Price per Night: $@room.PricePerNight</p>
+                        </div>
+                    }
+                </div>
+                <MudTextField @bind-Value="Description" Label="Description" Multiline="true" />
+                <MudTypography Typo="Typo.h6">Total Amount: $@CalculateTotalAmount()</MudTypography>
+            </MudCardContent>
+
+            <MudButton @onclick="ConfirmBooking">Забронировать</MudButton>
+        }
+    </MudPaper>
+</MudContainer>
+
+
 
 @code {
-	//room/user/tokenrequired/apibooking/create/
+    //room/user/apibooking/create/
+    private UpdateUserDto UserData { get; set; } = new UpdateUserDto();
+    private List<RoomDto> roomsInCart;
+    private decimal totalAmount;
+    private DateTime checkinDate;
+    private DateTime checkoutDate;
+    int numberOfNights;
+    private string Description;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await _tokenService.GetToken();
+
+        if (string.IsNullOrEmpty(token))
+        {
+
+            string currentUrl = Navigation.ToAbsoluteUri(Navigation.Uri).ToString();
+            Navigation.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(currentUrl)}");
+
+        }
+        else
+        {
+            var userId = await _tokenService.GetUserIdFromToken();
+            if (userId == -1)
+            {
+                string currentUrl = Navigation.ToAbsoluteUri(Navigation.Uri).ToString();
+                Navigation.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(currentUrl)}");
+
+                Snackbar.Add("Действие ссессии прекращено, войдите заново", Severity.Error);
+            }
+            UserData = await _userService.GetProfile(userId);
+
+            var roomInCartJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "roomsinCart");
+            roomsInCart = JsonSerializer.Deserialize<List<RoomDto>>(roomInCartJson);
+            var datesJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "selectedDates");
+            if (datesJson != null)
+            {
+                var dates = JsonSerializer.Deserialize<Dictionary<string, DateTime>>(datesJson);
+                checkinDate = dates.GetValueOrDefault("Checkin");
+                checkoutDate = dates.GetValueOrDefault("Checkout");
+                numberOfNights = (int)(checkoutDate - checkinDate).TotalDays;
+            }
+            CalculateTotalAmount(); 
+
+        }
+    }
+    private decimal CalculateTotalAmount()
+    {
+        if (roomsInCart != null)
+        {
+            totalAmount = roomsInCart.Sum(room => room.PricePerNight);
+            return totalAmount;
+        }
+        return 0;
+    }
+
+    private async Task ConfirmBooking()
+    {
+        foreach (var room in roomsInCart)
+        {
+            var booking = new BookingDto
+                {
+                    CheckInDate = checkinDate,
+                    CheckOutDate = checkoutDate,
+                    TotalPrice = numberOfNights*room.PricePerNight,
+                    Status = "confirmed",
+                    UserId = UserData.Id,
+                    RoomId = room.Id,
+                    Comments = Description
+
+            };
+            await _bookingService.Create(booking);
+        }
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "roomsinCart");
+        Navigation.NavigateTo("/profile/");
+    }
 }

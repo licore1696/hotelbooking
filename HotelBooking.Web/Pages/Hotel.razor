@@ -1,47 +1,437 @@
 ﻿@page "/hotel/{hotelId:int}"
 
 @using HotelBooking.BookingDTO.HotelDtos
+@using HotelBooking.BookingDTO.ReviewDtos
 @using HotelBooking.BookingDTO.RoomDtos
+@using HotelBooking.BookingDTO.SearchDtos
 @using HotelBooking.Services.Contracts
 @using Microsoft.AspNetCore.Components.Web
 @using System.Text.Json
 
 @inject IJSRuntime JSRuntime
+@inject NavigationManager _navigate
 @inject IHotelService _hotelService;
+@inject IRoomService _roomservice;
+@inject IReviewService _reviewService;
 <MudContainer>
-    <MudPaper Class="mud-elevation-3 p-4">
+    
         @if (hotel != null)
         {
-            <MudTypography Typo="Typo.h4" Class="mb-2">@hotel.Name</MudTypography>
-            <MudTypography Typo="Typo.subtitle1" Class="mb-4">@hotel.Description</MudTypography>
-            <MudRating ReadOnly="true" SelectedValue="@hotel.Rating" />
+        <style>
+            .hotel-card {
+                align-items: flex-start;
+                display: flex;
+                gap: 16px;
+                justify-content: space-between;
+            }
+
+            .hotel-info {
+                margin-top: 4px;
+            }
+
+            .rating-container {
+                align-items: flex-start;
+                display: flex;
+                flex-direction: column-reverse;
+                margin-bottom: 4px;
+            }
+
+            .hotel-name {
+                font-size: 21px;
+                line-height: 28px;
+            }
+
+            .location-info {
+                color: var(--color-grey-medium);
+                font-size: 13px;
+                line-height: 16px;
+            }
+            
+        </style>
+
+        <div class="hotel-card">
+            <div class="hotel-info">
+                <div class="rating-container">
+                    <h1 class="hotel-name">@hotel.Name</h1>
+                    <span class="rating-stars">
+                        <div class="rating-widget">
+                            <MudRating ReadOnly="true" SelectedValue="@hotel.Stars" />
+                        </div>
+                    </span>
+                </div>
+                <div class="location-info">
+                    <span class="location">@hotel.City, @hotel.Country</span>
+                </div>
+            </div>
+            <div>
+                <MudButton Variant="Variant.Outlined" OnClick="@NavigateToReview">Оставить Отзыв</MudButton>
+            </div>
+        </div>
+
+
+
+        <style>
+            /* Стили для карусели и информационного блока отеля */
+            .carousel-container {
+                align-items: flex-start;
+                display: flex;
+            }
+
+            .carousel-wrapper {
+                flex-grow: 1;
+            }
+
+            .hotel-info-wrapper {
+                flex-basis: 37.5%;
+                flex-shrink: 0;
+                margin-left: 16px;
+            }
+
+            .hotel-info-block {
+                background-color: var(--hotel-info-block-background);
+                border-radius: var(--hotel-info-block-border-radius);
+                box-shadow: var(--hotel-info-box-shadow);
+                padding: var(--hotel-info-padding);
+            }
+
+            .rating-row {
+                align-items: baseline;
+                display: flex;
+            }
+
+            .separator {
+                border-top: 1px solid var(--color-grey-light);
+                margin-top: 16px;
+                padding-top: 16px;
+            }
+
+            .section-title {
+                display: block;
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                margin-bottom: 16px;
+            }
+
+            .rating-value, .rating-text {
+                font-size: 24px;
+                line-height: 28px;
+            }
+
+            .accented-rating-background {
+                background: var(--rating-with-text-accented-background);
+            }
+
+            .rating-badge {
+                border-radius: 4px;
+                color: var(--rating-with-text-color);
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 24px;
+                padding: 2px 8px;
+                user-select: none;
+            }
+
+        </style>
+        <!-- HTML-структура для карусели и информационного блока отеля -->
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <!-- Карусель с изображениями -->
+                <MudCarousel TData="object" Class="my-custom-carousel" Style="height:410px; margin - bottom: 0;">
+                    <MudCarouselItem>
+                        <MudImage Src=@($"/images/{hotel.Id}/preview.jpg") Width="790" Height="410" ObjectFit="ObjectFit.Cover" Alt="hotel preview" Elevation="25" Class="rounded-lg" />
+                    </MudCarouselItem>
+
+                    @foreach (var image in images)
+                    {
+                        <MudCarouselItem>
+                            <MudImage Src=@($"/images/{hotel.Id}/{image}") Width="790" Height="410" ObjectFit="ObjectFit.Cover" Alt="hotelinf" Class="rounded-lg" />
+                        </MudCarouselItem>
+                    }
+                </MudCarousel>
+            </div>
+            <div class="hotel-info-wrapper">
+                <!-- Информационный блок отеля -->
+                <div class="hotel-info-block">
+                    <div class="rating-row">
+                        <!-- Рейтинг отеля -->
+                        <div class="rating-badge accented-rating-background rating-text">@hotel.Rating</div>
+                    </div>
+                    <div class="separator">
+                        <!-- Информация о жилье -->
+                        <div class="section-title">О жилье</div>
+                        <div>@hotel.Description</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         }
         else
         {
             <MudTypography Typo="Typo.body1" Class="mud-text-center mt-4">Информация о отеле не найдена</MudTypography>
         }
-    </MudPaper>
-    <div>
-        <MudTypography Typo="Typo.h6" Class="mb-2">Информация о номерах:</MudTypography>
-        @if (rooms != null && rooms.Any())
+    
+</MudContainer>
+
+<MudContainer Style="margin-top: 20px">
+<MudGrid>
+    <MudItem xs="5" Class="mud-width-70">
+        <MudDateRangePicker Label="Basic range picker" @bind-DateRange="_dateRange" />
+        </MudItem>
+        <MudItem xs="5">
+            <div class="d-flex" style="height: 100%;">
+                <MudButton @onclick="ToggleMenu" Id="menuButton" Variant="Variant.Text" Color="Color.Default" FullWidth="true" style="height: 100%;">
+                    <div class="d-flex">
+                        <MudText>@persons().ToString() @namePersons(), @roomcount().ToString() @nameRooms()</MudText>
+                    </div>
+                </MudButton>
+                <MudPopover AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Open="@isMenuVisible" >
+                
+                   
+                        <div class="d-flex flex-column w-100">
+                                @foreach (var (card, index) in cards.Select((card, index) => (card, index)))
+                            {
+                                <MudTypography class="d-flex align-items-center">
+									<strong class="mr-2">@(@index + 1) номер</strong>
+                                    <div class="ml-auto">
+                                        @if (roomcount() > 1)
+                                        {
+                                            <MudButton OnClick="@(() => RemoveRoomCardDto(card))" >Удалить</MudButton>
+                                        }
+                                    </div>
+                                </MudTypography>
+                                <MudRoomCardDto Class="mud-elevation-2 mb-2">
+                                    <RoomCardDtoContent>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <MudButton OnClick="@(() => Subtract(card))" Variant="Variant.Outlined" Color="Color.Primary" Disabled="@IsSubtractDisabled(card)">-</MudButton>
+                                            <MudTypography Typo="Typo.h5" Class="mb-2 align-text-center">@card.Capacity</MudTypography>
+                                            <MudButton OnClick="@(() => Add(card))" Variant="Variant.Outlined" Color="Color.Primary" Disabled="@IsAddDisabled(card)">+</MudButton>
+                                             
+                                         </div>
+                                          
+
+                                    </RoomCardDtoContent>
+                                </MudRoomCardDto>
+                            }
+                            @if (!IsAddRoomDisabled())
+                            {
+                                <MudButton OnClick="@AddRoomCardDto" Color="Color.Primary">+ Добавить номер</MudButton>
+                            }
+                        </div>
+                    
+                
+                </MudPopover>
+            </div>
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton OnClick="@ShowRooms" Size="Size.Large" Variant="Variant.Filled" Color="Color.Primary">Найти</MudButton>
+        </MudItem>
+</MudGrid>
+</MudContainer>
+<MudContainer Style="margin-top: 10px;">
+    <MudGrid Spacing="2">
+        <style>
+            .container {
+                width: 100%;
+                margin: 20px auto; /* отступ сверху */
+                border: 1px solid #ccc;
+                padding: 10px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .cell {
+                flex: 2; /* Каждая ячейка занимает равный процент ширины */
+                padding: 10px;
+                overflow: hidden; /* Предотвращает выход содержимого за границы ячейки */
+                box-sizing: border-box; /* С учетом padding и border при расчете размеров */
+            }
+
+            .separator {
+                border-left: 1px solid #ccc; /* вертикальные разделители */
+                height: 100%; /* чтобы разделители были одинаковой высоты */
+                margin: 0 10px;
+            }
+            .small-cell {
+            flex: 0.4; /* Настройте ширину ячейки по вашему усмотрению */
+            }
+            .desc{
+                font-size: .85em;
+            }
+        </style>
+        @if (filteredRooms != null && filteredRooms.Any())
         {
-            <ul>
-                @foreach (var room in rooms)
-                {
-                    <li>@room.Capacity</li>
-                }
-            </ul>
+            @foreach (var room in filteredRooms)
+            {
+                
+
+                <div class="container">
+                    <div class="cell">
+                        <span>@room.RoomType</span>
+                        <hr />
+                        <span class="desc">@room.Description</span>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="cell small-cell">
+                        <span>@room.Capacity</span>
+                    </div >
+                    <div class="separator"></div>
+                    <div class="cell small-cell">
+                        <span>$@room.PricePerNight</span>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="cell small-cell">
+						@if (isRoomInCart(room))
+						{
+							<MudButton OnClick="@(() => RemoveFromCart(room))" Color="Color.Error">Убрать из корзины</MudButton>
+						}
+						else
+						{
+							<MudButton OnClick="@(() => AddToCart(room))" Color="Color.Primary">Добавить в корзину</MudButton>
+						}
+                    </div>
+                </div>
+
+            }
+            
         }
         else
         {
-            <p>No room information available</p>
+            <MudTypography Typo="Typo.body1" Class="mud-text-center mt-4">Нет доступных комнат</MudTypography>
         }
-    </div>
+    </MudGrid>
 </MudContainer>
+<MudContainer>
+<style>
+    .review-card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ccc;
+        padding: 16px;
+        margin-bottom: 16px;
+        max-width: 400px;
+        margin-top: 15px; /* Добавляем отступ сверху */
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .review-rating {
+        font-size: 18px;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .review-name {
+        font-weight: bold;
+    }
+
+    .review-description {
+        font-size: 14px;
+    }
+</style>
+
+@foreach(var review in reviews){
+<div class="review-card">
+    <div class="review-header">
+                <div class="review-name">  @(string.IsNullOrWhiteSpace(review.Username) ? "Аноним" : review.Username)</div>
+        <div class="review-rating">@review.Rating</div>
+    </div>
+    <div class="review-description">
+        @review.Comment
+    </div>
+</div>
+}
+</MudContainer>
+
+
 
 @code {
     private HotelDto hotel;
-    private List<RoomCardDto> rooms;
+    public bool isMenuVisible { get; set; } = false;
+
+    private MudDateRangePicker _picker;
+    private DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
+    private bool _autoClose;
+    private bool _isMenuOpen = false;
+    private class Icons
+    {
+        public class Filled
+        {
+            public const string Menu = "@iconify-icons/mdi-light/menu";
+            public const string ArrowDropDown = "@iconify-icons/mdi-light/arrow-drop-down";
+        }
+    }
+
+    private List<RoomCardDto> cards = new List<RoomCardDto>();
+    private int persons()
+    {
+        int pers = 0;
+        foreach (var card in cards)
+        {
+            pers = pers + card.Capacity;
+        }
+        return pers;
+    }
+    private string namePersons()
+    {
+        int countpersons = persons();
+        if (countpersons == 1 || countpersons == 21 || countpersons == 31) { return "гость"; }
+        if (countpersons >= 2 && countpersons <= 4 || countpersons >= 22 && countpersons <= 24 || countpersons >= 32 && countpersons <= 34) { return "гостя"; }
+        if (countpersons >= 5) { return "гостей"; }
+        return "гостей";
+    }
+    private int roomcount()
+    {
+        return cards.Count;
+    }
+    private string nameRooms()
+    {
+        int countRooms = roomcount();
+        if (countRooms == 1) { return "комната"; }
+        if (countRooms >= 2 && countRooms <= 4) { return "комнаты"; }
+        if (countRooms >= 5 && countRooms <= 6) { return "комнат"; }
+        return "комнат";
+    }
+    private void AddRoomCardDto()
+    {
+        var newRoomCardDto = new RoomCardDto { Capacity = 1 };
+        cards.Add(newRoomCardDto);
+    }
+    private void ToggleMenu()
+    {
+        isMenuVisible = !isMenuVisible;
+    }
+
+    private void RemoveRoomCardDto(RoomCardDto card)
+    {
+        cards.Remove(card);
+    }
+
+    private void Add(RoomCardDto card)
+    {
+        card.Capacity++;
+    }
+
+    private void Subtract(RoomCardDto card)
+    {
+        if (card.Capacity > 1)
+        {
+            card.Capacity--;
+        }
+    }
+    private bool IsAddRoomDisabled() => cards.Count >= 6;
+    private bool IsAddDisabled(RoomCardDto card) => card.Capacity >= 6;
+    private bool IsSubtractDisabled(RoomCardDto card) => card.Capacity <= 1;
+
+
 
     [Parameter]
     public int hotelId { get; set; }
@@ -49,25 +439,130 @@
     protected override async Task OnInitializedAsync()
     {
         // Получение информации о номерах из localStorage
+
         var roomInfoJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "selectedRooms");
 
+        var datesJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "selectedDates");
 
+        if (roomInfoJson == null)
+        {
+            cards.Add(new RoomCardDto { Capacity = 2 });
+        }
+        else
+        {
+            cards = JsonSerializer.Deserialize<List<RoomCardDto>>(roomInfoJson);
+        }
 
-        // Assuming the JSON structure is an array directly
-        rooms = JsonSerializer.Deserialize<List<RoomCardDto>>(roomInfoJson);
+        if (datesJson != null)
+        {
+            var dates = JsonSerializer.Deserialize<Dictionary<string, DateTime>>(datesJson);
+            var checkinDate = dates.GetValueOrDefault("Checkin");
+            var checkoutDate = dates.GetValueOrDefault("Checkout");
+            _dateRange = new DateRange(checkinDate, checkoutDate);
+        }
 
-        // Now you can use the 'roomsArray' directly
-        // For example, if it's an array of room capacities:
-        foreach (var roomCapacity in rooms)
+        foreach (var roomCapacity in cards)
         {
             Console.WriteLine($"Room Capacity: {roomCapacity}");
         }
 
 
-        hotel = await  _hotelService.GetById(hotelId);
-        
+        hotel = await _hotelService.GetById(hotelId);
+
+
+
+
+        var roomInCartJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "roomsinCart");
+
+        try
+        {
+            roomsInCart = JsonSerializer.Deserialize<List<RoomDto>>(roomInCartJson);
+        }
+        catch (Exception ex)
+        {
+            roomsInCart = new List<RoomDto>();
+            Console.WriteLine($"Error deserializing roomInCartJson: {ex.Message}");
+        }
+
+        await ShowRooms();
+        await GetImages();
+        await GetReviews();
     }
-    //getroomsifhaverooms
-    //getallroomswithfilter
-    //room card navigate booking
+
+
+    List<RoomDto> filteredRooms;
+    public async Task ShowRooms()
+    {
+        var filter = new FilterRoomDto { guests = persons(), 
+                Checkin = _dateRange.Start.GetValueOrDefault(),
+                CheckOut = _dateRange.End.GetValueOrDefault(),
+                hotelId = hotelId
+        };
+        filteredRooms = await _roomservice.GetFilteredRooms(filter);
+
+
+
+    }
+    private List<RoomDto> roomsInCart;
+    private bool isRoomInCart(RoomDto room)
+    {
+        if (roomsInCart != null)
+        {
+            return roomsInCart.Any(r => r.Id == room.Id);
+        }
+
+        return false;
+
+    }
+    private async Task AddToCart(RoomDto room)
+    {
+
+        roomsInCart.Add(room);
+
+
+        var selectedRoomsJson = JsonSerializer.Serialize(roomsInCart);
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "roomsinCart", selectedRoomsJson);
+
+
+        var selectedDatesJson = JsonSerializer.Serialize(new Dictionary<string, DateTime>
+        {
+            { "Checkin", _dateRange.Start.GetValueOrDefault() },
+            { "Checkout", _dateRange.End.GetValueOrDefault() }
+        });
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "selectedDates", selectedDatesJson);
+    }
+    private async Task RemoveFromCart(RoomDto room)
+    {
+        var roomToRemove = roomsInCart.FirstOrDefault(c => c.Id == room.Id);
+        if (roomToRemove != null)
+        {
+            roomsInCart.Remove(roomToRemove);
+        }
+
+
+        var selectedRoomsJson = JsonSerializer.Serialize(roomsInCart);
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "roomsinCart", selectedRoomsJson);
+
+        var selectedDatesJson = JsonSerializer.Serialize(new Dictionary<string, DateTime>
+        {
+            { "Checkin", _dateRange.Start.GetValueOrDefault() },
+            { "Checkout", _dateRange.End.GetValueOrDefault() }
+        });
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "selectedDates", selectedDatesJson);
+
+    }
+    private List<string> images;
+    private async Task GetImages()
+    {
+        images = await _hotelService.GetImagesById(hotelId);
+    }
+    private async void NavigateToReview()
+    {
+        _navigate.NavigateTo($"/review/{hotel.Id}");
+    }
+    private List<ReviewDto> reviews = new List<ReviewDto>();
+    private async Task GetReviews()
+    {
+        reviews = await _reviewService.GetReviews();
+    }
 }

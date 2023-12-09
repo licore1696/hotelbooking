@@ -8,5 +8,6 @@
         Task Update(Room room);
         Task Delete(Room room);
 		Task<List<Room>> GetAvailableRoomsByHotelIdAndDate(int hotelId, DateTime checkInDate, DateTime checkOutDate);
+        Task<List<Room>> GetFilteredRooms(int guests, DateTime checkInDate, DateTime checkOutDate, int hotelId);
 	}
 }
